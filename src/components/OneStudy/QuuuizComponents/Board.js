@@ -77,22 +77,20 @@ export default function Board() {
   const [attempted, setattempted] = useState(0);
   const [score, setscore] = useState(0);
   const [q, setQ] = useState(q2);
+
   useEffect(() => {
     if (current === q.length + 1) {
       let y = q.filter((i) => i.ansg !== -1).length;
       setTimeout(() => {
         setattempted(y);
-        setscore(getScore());
+        let score = q.filter((qs) => qs.oai === qs.ansg).length;
+        setscore(score);
       }, 400);
     }
-  }, [current]);
+  }, [current, q]);
 
-  function getScore() {
-    console.log(q);
-    let score = q.filter((qs) => qs.oai === qs.ansg).length;
-    console.log(score);
-    return score;
-  }
+
+
   const onNext = () => {
     if (current <= q.length + 1) {
       document.getElementById(`q${current}`).scrollIntoView({
