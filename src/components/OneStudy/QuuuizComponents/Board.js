@@ -156,7 +156,7 @@ export default function Board() {
 
         <button
           className={
-            "w-20 py-1 outline-none focus:outline-none hover:bg-gray-300  text-sm bg-gray-200 rounded-sm"
+            "w-20 py-1 outline-none focus:outline-none hover:bg-gray-300 text-lightBlue-600 font-bold tracking-wider text-sm  bg-gray-100 bg-opacity-80 rounded-sm"
           }
         >
           Submit
@@ -164,7 +164,7 @@ export default function Board() {
         {current <= q.length && (
           <button
             className={
-              "w-20 py-1 outline-none focus:outline-none hover:bg-gray-300  text-sm bg-gray-200 rounded-sm"
+              "w-20 py-1 outline-none focus:outline-none hover:bg-gray-300 text-lightBlue-600 font-bold tracking-wider text-sm  bg-gray-100 bg-opacity-80 rounded-sm"
             }
             onClick={onNext}
           >

@@ -23,9 +23,9 @@ export default function PerSubject() {
 
   const handleTopicCheck = async (updateTopic) => {
     console.log(updateTopic);
-    await RAPI().post(`/lesson/${groupId}/update`, updateTopic);
+    await RAPI().post(`/lesson/${groupId}/update/${subject}`, updateTopic);
   };
-  
+
   return (
     <div className={"py-3 px-5 flex justify-center items-center"}>
       {subjectInfo && (

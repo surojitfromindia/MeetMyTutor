@@ -7,7 +7,7 @@ export default function AllNewStudy({ AllSubjects, gid }) {
     <div className={"flex flex-col gap-3"}>
       <div
         className={
-          "rounded-md  shadow-xl grid sm:grid-cols-2 md:grid-cols-3  lg:grid-cols-4 gap-4 divide-y sm:divide-y-0 divide-rose-400 px-5  bg-gradient-to-br from-rose-500   to-red-400"
+          "rounded-md  shadow-xl grid sm:grid-cols-2 md:grid-cols-3  lg:grid-cols-4 gap-4 divide-y sm:divide-y-0 divide-rose-400 px-5  bg-gradient-to-br from-rose-600   to-red-500"
         }
       >
         {AllSubjects &&

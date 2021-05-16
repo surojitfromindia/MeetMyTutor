@@ -1,17 +1,23 @@
 import { BadgeCheckIcon } from "@heroicons/react/solid";
-import { useState, useEffect } from "react";
-export default function Topic({ topics, onTopicComplete }) {
+import { useState } from "react";
+export default function Topic({
+  topics,
+  onTopicComplete,
+  isTopicTrackingEditable = true,
+}) {
   const [topicList, setTopicList] = useState(topics); //change the checkmark to green if it is a done task
 
   let isAllDone = topics.reduce((x, a) => x && a.done, true);
 
   const handleCheck = (ev) => {
-    ev.preventDefault();
-    ev.stopPropagation();
-    let k = topicList;
-    k[ev.target.id].done = !k[ev.target.id].done;
-    setTopicList([...k]);
-    onTopicComplete(topicList);
+    if (isTopicTrackingEditable) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      let k = topicList;
+      k[ev.target.id].done = !k[ev.target.id].done;
+      setTopicList([...k]);
+      onTopicComplete(topicList);
+    }
   };
   return (
     <div
@@ -25,12 +31,12 @@ export default function Topic({ topics, onTopicComplete }) {
         </span>
       )}
       <div className={"my-5"}>
-        <ul className={"max-w-md"}>
+        <ul className={"max-w-md space-y-3"}>
           {topicList.map(({ type, des, done }, idx) => (
             <li className={"my-2 cursor-pointer"} key={idx}>
               <div className={"flex"}>
                 <BadgeCheckIcon
-                  className={`w-5 h-5 mr-1.5 mt-1 flex-shrink-0 ${
+                  className={`w-6 h-6 mr-1.5  flex-shrink-0 ${
                     done ? "text-green-300" : ""
                   } text-gray-200`}
                 />

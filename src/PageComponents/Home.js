@@ -1,11 +1,11 @@
-import GroupList from "../components/DashBoardComponents/GroupList";
+import JoinedGroupList from "../components/HomeComponents/JoinedGroupList";
 
-export default function Home({ groupInformation }) {
+export default function Home({ groupInformation, onJoin }) {
   return (
     <div>
       <div className={"flex py-3 px-5"}>
         {groupInformation.length !== 0 && (
-          <GroupList glist={groupInformation} />
+          <JoinedGroupList glist={groupInformation} onJoin={onJoin} />
         )}
       </div>
     </div>

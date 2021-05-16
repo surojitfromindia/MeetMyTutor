@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import RAPI from "../API/RequestAPI";
 import PrgBar from "../components/CommonComponents/PrgBar";
 import AllNewStudy from "../components/StudyGroupCard.js/AllNewStudy";
+
 //A group
 export default function NewLesson() {
   const { groupId } = useParams();
@@ -67,7 +68,6 @@ export default function NewLesson() {
           <AllNewStudy
             AllSubjects={groupInfo.NewLesson.allSubjects}
             gid={groupId}
-          
           />
         )}
       </div>

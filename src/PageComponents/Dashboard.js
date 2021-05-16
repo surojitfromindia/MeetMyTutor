@@ -43,6 +43,20 @@ export default function Dashboard() {
     }
   }, [groupids]);
 
+  const handleJoinGroup = async (groupid, sekey) => {
+    try {
+      await RAPI().post(`/user/register/${groupid}?skey=${sekey}`);
+      await RAPI()
+        .get("/user")
+        .then(({ data }) => {
+          setGroupids(data.groupsId);
+          setsHidden(data.realStudentID);
+        });
+    } catch (err) {
+      alert(err);
+    }
+  };
+
   return (
     <div>
       <Navbar show={showNav} nonHiddenInfo={NonHidden} />
@@ -51,7 +65,12 @@ export default function Dashboard() {
         <Route
           exact
           path="/home"
-          render={() => <Home groupInformation={groupInformations} />}
+          render={() => (
+            <Home
+              groupInformation={groupInformations}
+              onJoin={handleJoinGroup}
+            />
+          )}
         />
         <Route exact path="/study/:groupId/all" render={() => <AllLesson />} />
         <Route exact path="/study/:groupId/new" render={() => <NewLesson />} />

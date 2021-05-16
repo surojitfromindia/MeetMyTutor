@@ -9,8 +9,6 @@ export default function NavBarWithButton({ show }) {
       } overflow-hidden text-sm group-hover:max-h-96 flex flex-col gap-1 font-medium text-gray-200`}
     >
       <OneMenu menu={links[0]} isArrowShow={false} />
-      <OneMenu menu={links[1]} isArrowShow={false} />
-      <OneMenu menu={links[2]} isArrowShow={false} />
     </div>
   );
 }

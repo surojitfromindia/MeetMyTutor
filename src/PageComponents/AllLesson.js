@@ -10,6 +10,7 @@ import NewStudyCard from "../components/HomePageComponents/NewStudyCard";
 export default function AllLesson() {
   const { groupId } = useParams();
   const [groupInfo, setGroupInfo] = useState();
+  const [groupInfoFromStudyGroup, setgroupInfoFromStudyGroup] = useState();
 
   //pull new lesson
   useEffect(() => {
@@ -18,7 +19,21 @@ export default function AllLesson() {
     })();
   }, [groupId]);
 
-  //pull whole group info
+  //pull whole group info from usered copied part
+  useEffect(() => {
+    (async () => {
+      let { data } = await RAPI().get(`/lesson/${groupId}?time=all`);
+      setGroupInfo(data);
+    })();
+  }, [groupId]);
+
+  useEffect(() => {
+    (async () => {
+      let { data } = await RAPI().get(`/group/${groupId}`);
+      setgroupInfoFromStudyGroup(data);
+    })();
+  }, [groupId]);
+
   useEffect(() => {
     (async () => {
       let { data } = await RAPI().get(`/lesson/${groupId}?time=all`);
@@ -28,7 +43,13 @@ export default function AllLesson() {
 
   return (
     <div className={"px-5 py-5 mt-3"}>
-      <Greet heading="Hey, Ready to Roll !" backG="to-rose-500 from-red-400" />
+      {groupInfoFromStudyGroup && (
+        <Greet
+          heading="Hey, Ready to Roll !"
+          backG="to-rose-500 from-red-400"
+          groupName={groupInfoFromStudyGroup.group_name}
+        />
+      )}
 
       <div
         className={
@@ -36,14 +57,15 @@ export default function AllLesson() {
         }
       >
         {groupInfo && (
-          <UpcomigCard gid={groupId} lesson={groupInfo.NewLesson.allSubjects} />
-        )}
-        {groupInfo && (
           <NewStudyCard
             gid={groupId}
             lesson={groupInfo.NewLesson.allSubjects}
           />
         )}
+        {groupInfo && (
+          <UpcomigCard gid={groupId} lesson={groupInfo.NewLesson.allSubjects} />
+        )}
+        {groupInfo && <OldStudyCard />}
       </div>
     </div>
   );

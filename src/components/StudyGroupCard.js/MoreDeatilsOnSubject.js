@@ -8,11 +8,12 @@ export default function MoreDeatilsOnSubject({
   isDone = false,
   gid,
 }) {
+  let isAllDone = subjectData?.topic?.reduce((x, a) => x && a.done, true);
   return (
     <div
       id={subjectData?.subjectName}
       className={`flex flex-col justify-between transition-all hover:-mx-1 px-5 py-3 rounded-md bg-gradient-to-tr  ${
-        isDone ? doneG : backG
+        isAllDone ? doneG : backG
       }`}
     >
       <div>
@@ -25,7 +26,7 @@ export default function MoreDeatilsOnSubject({
             {subjectData?.subName}
           </span>
 
-          {isDone && (
+          {isAllDone && (
             <span
               className={
                 "font-robotoCondensed bg-gray-50 px-2 py-0.5 rounded-xl bg-opacity-30 text-xs text-gray-100"
@@ -41,12 +42,12 @@ export default function MoreDeatilsOnSubject({
               "scrollbar flex flex-col list-none max-h-28 overflow-y-auto space-y-2  "
             }
           >
-            {subjectData.topic.map(({ type, des, done }, idx) => (
+            {subjectData.topic.map(({ type, des }, idx) => (
               <li className={"my-1"} key={idx}>
                 <div className={"flex items-start max-h-10 overflow-hidden "}>
                   <BadgeCheckIcon
                     className={`w-5 h-5 mr-1.5  flex-shrink-0 ${
-                      done ? "text-green-300" : ""
+                      isAllDone ? "text-green-300" : ""
                     } text-gray-200`}
                   />
                   <span className={"text-gray-100 font-poppin text-sm"}>
