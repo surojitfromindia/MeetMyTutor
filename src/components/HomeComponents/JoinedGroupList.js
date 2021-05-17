@@ -31,9 +31,10 @@ export default function JoinedGroupList({ glist, onJoin }) {
           "w-full flex flex-col   space-y-3 sm:space-y-0 sm:space-x-2 sm:flex-row "
         }
       >
-        {groupList.map((group, index) => (
-          <GroupCard ginfo={group} key={index} />
-        ))}
+        {groupList.length !== 0 &&
+          groupList.map((group, index) => (
+            <GroupCard ginfo={group} key={index} />
+          ))}
       </div>
     </div>
   );
@@ -122,12 +123,12 @@ const JoinGroup = ({ onJoin }) => {
     onJoin(gRef.current.value, keyRef.current.value);
   };
   return (
-    <div>
+    <div className={"h-8"}>
       <input
         type={"text"}
         ref={gRef}
         className={
-          "px-3 py-2 rounded-none text-sm rounded-l-md bg-coolGray-700  outline-none border-collapse focus:border-b-2 focus:border-lightBlue-500"
+          "px-3 py-2 border-0 focus:ring-0   rounded-none text-sm rounded-l-md bg-coolGray-700  border-collapse focus:border-b-2 focus:border-lightBlue-500"
         }
         placeholder={"Group ID"}
       />
@@ -135,7 +136,7 @@ const JoinGroup = ({ onJoin }) => {
         ref={keyRef}
         type={"text"}
         className={
-          "px-3 py-2  outline-none text-sm bg-coolGray-700 rounded-none w-20 border-collapse focus:border-b-2 focus:border-lightBlue-500  "
+          "px-3 py-2  border-0 focus:ring-0 text-sm bg-coolGray-700 rounded-none w-20 border-collapse focus:border-b-2 focus:border-lightBlue-500  "
         }
         placeholder={"KEY"}
       />

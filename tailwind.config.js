@@ -34,5 +34,5 @@ module.exports = {
       borderRadius: ["hover", "focus", "group-hover", "group-focus"],
     },
   },
-  plugins: [],
+  plugins: [require("@tailwindcss/forms")],
 };

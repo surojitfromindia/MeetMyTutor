@@ -33,7 +33,7 @@ export default function LoginPage({ setToken }) {
                 "my-3 text-2xl font-semibold text-gray-700 dark:text-emerald-400 "
               }
             >
-              Done This
+              Me & My Tutor
             </h1>
             <p className={"text-sm text-gray-600 dark:text-emerald-400"}>
               Enter your email and credentials

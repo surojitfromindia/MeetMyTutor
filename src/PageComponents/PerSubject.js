@@ -22,7 +22,6 @@ export default function PerSubject() {
   }, [LessonInfo, subject]);
 
   const handleTopicCheck = async (updateTopic) => {
-    console.log(updateTopic);
     await RAPI().post(`/lesson/${groupId}/update/${subject}`, updateTopic);
   };
 

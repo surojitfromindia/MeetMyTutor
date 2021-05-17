@@ -7,7 +7,6 @@ import AllNewStudy from "../components/StudyGroupCard.js/AllNewStudy";
 //A group
 export default function NewLesson() {
   const { groupId } = useParams();
-  console.log(groupId);
   const [pV, setPv] = useState(0);
   const [max, setMax] = useState(100);
   const [groupInfo, setGroupInfo] = useState();
@@ -30,7 +29,6 @@ export default function NewLesson() {
   //update the progress
   useEffect(() => {
     if (groupInfo) {
-      console.log(groupInfo);
       let max = groupInfo.NewLesson.allSubjects.reduce(
         (a, x) => a + x.topic.length,
         0
