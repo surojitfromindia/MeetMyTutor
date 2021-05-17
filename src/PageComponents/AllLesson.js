@@ -34,13 +34,6 @@ export default function AllLesson() {
     })();
   }, [groupId]);
 
-  useEffect(() => {
-    (async () => {
-      let { data } = await RAPI().get(`/lesson/${groupId}?time=all`);
-      setGroupInfo(data);
-    })();
-  }, [groupId]);
-
   return (
     <div className={"px-5 py-5 mt-3"}>
       {groupInfoFromStudyGroup && (
@@ -56,13 +49,13 @@ export default function AllLesson() {
           "mt-10 grid gap-5  sm:grid-cols-2 md:grid-cols-3  xl:grid-cols-4"
         }
       >
-        {groupInfo && (
+        {groupInfo?.NewLesson && (
           <NewStudyCard
             gid={groupId}
             lesson={groupInfo.NewLesson.allSubjects}
           />
         )}
-        {groupInfo && (
+        {groupInfo?.NewLesson && (
           <UpcomigCard gid={groupId} lesson={groupInfo.NewLesson.allSubjects} />
         )}
         {groupInfo && <OldStudyCard />}
