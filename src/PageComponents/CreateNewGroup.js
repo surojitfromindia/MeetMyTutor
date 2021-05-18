@@ -178,7 +178,7 @@ const TIdRow = ({ onSaveOrEdit, iID, onRmv, tidProps = "" }) => {
         disabled={!editable}
         defaultValue={tidProps}
         className={
-          "px-2 py-2 w-full flex-shrink  border-0  focus:ring-0   rounded-none text-sm rounded-l-md bg-coolGray-700  border-collapse focus:border-b-2 focus:border-lightBlue-500"
+          "px-2 py-2 w-full flex-shrink  border-0  focus:ring-0 outline-none  rounded-none text-sm rounded-l-md bg-coolGray-700  border-collapse focus:border-b-2 focus:border-lightBlue-500"
         }
         placeholder={"User ID"}
       />

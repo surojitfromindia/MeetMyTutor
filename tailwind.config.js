@@ -1,6 +1,5 @@
 const colors = require("tailwindcss/colors");
 module.exports = {
-  mode: "jit",
   purge: ["./src/**/*.{js,jsx,ts,tsx}", "./public/index.html"],
   darkMode: "class", // or 'media' or 'class'
   theme: {
@@ -34,5 +33,5 @@ module.exports = {
       borderRadius: ["hover", "focus", "group-hover", "group-focus"],
     },
   },
-  plugins: [ ],
+  plugins: [],
 };

@@ -1,23 +1,22 @@
-import { useEffect, useState, useRef } from "react";
 import moment from "moment";
 import { BellIcon } from "@heroicons/react/solid";
 import { Link } from "react-router-dom";
 
-export default function CreatedGroupList({ cglist }) {
+export default function CreatedGroupList({ cglist, onCGCOpenClick }) {
   return (
     <div className={"w-full flex flex-col space-y-6 "}>
-      <div className={"flex flex-col space-y-2"}>
+      <div className={"flex flex-col space-y-3"}>
         <span className={"font-robotoCondensed text-4xl  tracking-wider"}>
           Created
         </span>
         <div
           className={
-            "w-full flex flex-col   space-y-3 sm:space-y-0 sm:space-x-2 sm:flex-row "
+            "w-full flex flex-col   space-y-4 sm:space-y-0 sm:space-x-3 sm:flex-row "
           }
         >
           {cglist.length !== 0 &&
             cglist.map((group, index) => (
-              <GroupCard cginfo={group} key={index} />
+              <GroupCard cginfo={group} key={index} onOpenClick={onCGCOpenClick} />
             ))}
         </div>
 
@@ -27,7 +26,10 @@ export default function CreatedGroupList({ cglist }) {
   );
 }
 
-const GroupCard = ({ cginfo }) => {
+const GroupCard = ({ cginfo, onOpenClick }) => {
+  const handleOpen = () => {
+    onOpenClick(cginfo.group_name);
+  };
   return (
     <div
       className={
@@ -96,15 +98,15 @@ const GroupCard = ({ cginfo }) => {
             {moment.utc(cginfo?.NewLesson?.lesson_date).format("DD-MM-YYYY")}
           </span>
         </div>
-        {/*<Link to={`/study/${cginfo._id}/all`}>
-          <button
-            className={
-              "outline-none  font-medium text-sm  tracking-wider focus:outline-none  px-3 py-1 rounded-md hover:bg-opacity-95 bg-lightBlue-500 bg-opacity-80 text-warmGray-100"
-            }
-          >
-            OPEN
-          </button>
-        </Link>*/}
+
+        <button
+          onClick={handleOpen}
+          className={
+            "outline-none  font-medium text-sm  tracking-wider focus:outline-none  px-3 py-1 rounded-md hover:bg-opacity-95 bg-violet-400 bg-opacity-80 text-warmGray-100"
+          }
+        >
+          OPEN
+        </button>
       </div>
     </div>
   );
