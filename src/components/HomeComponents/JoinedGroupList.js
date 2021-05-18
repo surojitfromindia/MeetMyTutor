@@ -14,7 +14,7 @@ export default function JoinedGroupList({ glist, onJoin }) {
   return (
     <div className={"w-full flex flex-col space-y-6 "}>
       <div className={"flex flex-col space-y-2"}>
-        <span className={"font-robotoCondensed text-4xl  tracking-wider"}>
+        <span className={"font-robotoCondensed text-4xl tracking-wider"}>
           Joined
         </span>
         <div
@@ -28,7 +28,7 @@ export default function JoinedGroupList({ glist, onJoin }) {
 
       <div
         className={
-          "w-full flex flex-col   space-y-4 sm:space-y-0 sm:space-x-3 sm:flex-row "
+          "w-full flex flex-col space-y-4 sm:space-y-0 sm:gap-2 sm:flex-row sm:flex-wrap "
         }
       >
         {groupList.length !== 0 &&
@@ -44,7 +44,7 @@ const GroupCard = ({ ginfo }) => {
   return (
     <div
       className={
-        "shadow-2xl flex flex-col justify-between py-3 px-4 h-44  overflow-y-auto w-full sm:w-1/2 md:w-1/3 lg:w-1/4 rounded-md text-gray-200  bg-lightBlue-600 "
+        "shadow-2xl flex flex-col justify-between py-3 px-4 h-44  overflow-y-auto w-full sm:w-80  rounded-md text-gray-200  bg-lightBlue-600 "
       }
     >
       <div className="flex flex-row justify-between ">

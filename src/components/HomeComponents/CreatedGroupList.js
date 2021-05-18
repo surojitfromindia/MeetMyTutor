@@ -11,12 +11,16 @@ export default function CreatedGroupList({ cglist, onCGCOpenClick }) {
         </span>
         <div
           className={
-            "w-full flex flex-col   space-y-4 sm:space-y-0 sm:space-x-3 sm:flex-row "
+            "w-full flex flex-col space-y-4 sm:space-y-0 sm:gap-2 sm:flex-row sm:flex-wrap"
           }
         >
           {cglist.length !== 0 &&
             cglist.map((group, index) => (
-              <GroupCard cginfo={group} key={index} onOpenClick={onCGCOpenClick} />
+              <GroupCard
+                cginfo={group}
+                key={index}
+                onOpenClick={onCGCOpenClick}
+              />
             ))}
         </div>
 
@@ -33,7 +37,7 @@ const GroupCard = ({ cginfo, onOpenClick }) => {
   return (
     <div
       className={
-        "flex flex-col justify-between py-3 px-4 h-44  overflow-y-auto w-full sm:w-1/2 md:w-1/3 lg:w-1/4 rounded-md text-gray-200  bg-violet-500"
+        "flex flex-col justify-between py-3 px-4 h-44  overflow-y-auto w-full sm:w-80  rounded-md text-gray-200  bg-violet-500"
       }
     >
       <div className="flex flex-row justify-between ">
@@ -45,7 +49,7 @@ const GroupCard = ({ cginfo, onOpenClick }) => {
             <div className={"flex flex-row items-center gap-2 "}>
               <span
                 className={
-                  "font-medium overflow-x-hidden tracking-wider w-36 overflow-ellipsis text-sm"
+                  "font-medium overflow-x-hidden tracking-wider w-20 overflow-ellipsis text-sm"
                 }
               >
                 {cginfo._id}

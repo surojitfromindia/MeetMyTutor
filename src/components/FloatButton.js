@@ -1,5 +1,5 @@
 import NavBarWithButton from "./NavBarWithButton";
-import { PlusSmIcon } from "@heroicons/react/solid";
+import { HomeIcon } from "@heroicons/react/solid";
 export default function FloatButton({ showNav, visiable }) {
   return (
     <div
@@ -22,7 +22,7 @@ export default function FloatButton({ showNav, visiable }) {
           "justify-center items-center flex rounded-full bg-gradient-to-tr from-lightBlue-700 to-indigo-800 "
         }
       >
-        <PlusSmIcon className={"w-7 h-7 text-gray-50 "} />
+        <HomeIcon className={"w-6 h-6 text-gray-50 "} />
       </div>
     </div>
   );
