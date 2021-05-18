@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import FloatButton from "../components/FloatButton";
 import RAPI from "../API/RequestAPI";
-import { Redirect, Route, Switch } from "react-router";
+import { Redirect, Route, Switch, useHistory } from "react-router";
 import Home from "./Home";
 import Group from "./NewLesson";
 import AllLesson from "./AllLesson";
@@ -10,8 +10,10 @@ import NewLesson from "./NewLesson";
 import PerSubject from "./PerSubject";
 import CreateNewGroup from "./CreateNewGroup";
 import Modal from "./Modal";
+import CreatedGroupDetails from "./CreatedGroupDetails";
 
 export default function Dashboard() {
+  const history = useHistory();
   const [modal, setModal] = useState({
     show: false,
     message: "None",
@@ -27,11 +29,11 @@ export default function Dashboard() {
   const handleshowNav = () => {
     setShowNav(!showNav);
   };
+  const [cN, seCN] = useState("");
   useEffect(() => {
     RAPI()
       .get("/user")
       .then(({ data }) => {
-        console.log(data);
         setGroupids(data.groupsId);
         setsHidden(data.realStudentID);
         setCreatedGroupids(data.createdGroupId);
@@ -43,9 +45,9 @@ export default function Dashboard() {
       });
   }, []);
 
+  /*Get all group infomatios that the user is registered with */
   useEffect(() => {
     let TempList = [];
-    console.log(groupids);
     if (groupids.length !== 0) {
       groupids.forEach(async (groupid) => {
         let { data } = await RAPI().get(`/group/${groupid}/`);
@@ -55,14 +57,14 @@ export default function Dashboard() {
     }
   }, [groupids]);
 
+  /*Get all groups information that is created by user  */
   useEffect(() => {
     let tempCreateGIDs = [];
-    console.log(createdGroupids);
     if (createdGroupids.length !== 0) {
       createdGroupids.forEach(async (groupid) => {
         try {
           let { data } = await RAPI().get(`/group/${groupid.name}/admin`);
-          console.log(data);
+
           tempCreateGIDs.push(data);
           setCreatedGroupInformation([...tempCreateGIDs]);
         } catch (err) {
@@ -70,9 +72,9 @@ export default function Dashboard() {
         }
       });
     }
-    console.log(createdGroupids);
   }, [createdGroupids]);
 
+  /*Join A Group */
   const handleJoinGroup = async (groupid, sekey) => {
     try {
       await RAPI().post(`/user/register/${groupid}?skey=${sekey}`);
@@ -86,6 +88,8 @@ export default function Dashboard() {
       alert(err);
     }
   };
+
+  /*Create A Group */
   const handleCreateGroup = async (gname, gkey, gsnum, gisP, gtList) => {
     console.log(gname, gkey, gsnum, gisP, gtList);
     let postBody = {
@@ -98,7 +102,6 @@ export default function Dashboard() {
     await RAPI()
       .post("/group/new", postBody)
       .then(({ data }) => {
-        console.log(data);
         setModal({
           show: !modal.show,
           message: data.message.des,
@@ -109,8 +112,12 @@ export default function Dashboard() {
         }, 3000);
       });
   };
+
+  const handleCGIOpen = (cgname) => {
+    history.push(`/mygroup/${cgname}`);
+  };
   return (
-    <div className={"flex flex-col"}>
+    <div className={"flex flex-col mb-32"}>
       <Navbar show={showNav} nonHiddenInfo={NonHidden} />
       <Modal show={modal.show} message={modal.message} type={modal.type} />
       <Switch>
@@ -121,12 +128,13 @@ export default function Dashboard() {
           render={() => (
             <Home
               groupInformation={groupInformations}
-              createdGroupInfomation ={createdGroupInfomation}
+              createdGroupInfomation={createdGroupInfomation}
               onJoin={handleJoinGroup}
+              onCGCOpenClick={handleCGIOpen}
             />
           )}
         />
-        <Route exact path="/study/:groupId/all" render={() => <AllLesson />} />
+        <Route exact path="/study/:groupId/all" component={AllLesson} />
         <Route exact path="/study/:groupId/new" render={() => <NewLesson />} />
         <Route
           exact
@@ -138,11 +146,15 @@ export default function Dashboard() {
           path="/study/:groupId/old/:subject"
           render={() => <PerSubject />}
         />
-        <Route exact path="/study/:groupId/up" render={() => <Group />} />
+        <Route exact path="/study/:groupId/up" component={Group} />
         <Route
           exact
           path="/group/new"
           render={() => <CreateNewGroup onCreate={handleCreateGroup} />}
+        />
+        <Route
+          path="/mygroup/:gname"
+          render={() => <CreatedGroupDetails />}
         />
       </Switch>
       <FloatButton showNav={handleshowNav} visiable={showNav} />

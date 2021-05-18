@@ -4,13 +4,17 @@ import CreatedGroupList from "../components/HomeComponents/CreatedGroupList";
 export default function Home({
   groupInformation,
   createdGroupInfomation,
+  onCGCOpenClick,
   onJoin,
 }) {
   return (
     <div className={"flex flex-col py-3 px-5 space-y-6"}>
       <div>{<JoinedGroupList glist={groupInformation} onJoin={onJoin} />}</div>
       <div>
-        <CreatedGroupList cglist={createdGroupInfomation} />
+        <CreatedGroupList
+          cglist={createdGroupInfomation}
+          onCGCOpenClick={onCGCOpenClick}
+        />
       </div>
     </div>
   );

@@ -28,7 +28,7 @@ export default function JoinedGroupList({ glist, onJoin }) {
 
       <div
         className={
-          "w-full flex flex-col   space-y-3 sm:space-y-0 sm:space-x-2 sm:flex-row "
+          "w-full flex flex-col   space-y-4 sm:space-y-0 sm:space-x-3 sm:flex-row "
         }
       >
         {groupList.length !== 0 &&
@@ -44,7 +44,7 @@ const GroupCard = ({ ginfo }) => {
   return (
     <div
       className={
-        "flex flex-col justify-between py-3 px-4 h-44  overflow-y-auto w-full sm:w-1/2 md:w-1/3 lg:w-1/4 rounded-md text-gray-200  bg-lightBlue-600 "
+        "shadow-2xl flex flex-col justify-between py-3 px-4 h-44  overflow-y-auto w-full sm:w-1/2 md:w-1/3 lg:w-1/4 rounded-md text-gray-200  bg-lightBlue-600 "
       }
     >
       <div className="flex flex-row justify-between ">
@@ -128,7 +128,7 @@ const JoinGroup = ({ onJoin }) => {
         type={"text"}
         ref={gRef}
         className={
-          "px-3 py-2 border-0 focus:ring-0   rounded-none text-sm rounded-l-md bg-coolGray-700  border-collapse focus:border-b-2 focus:border-lightBlue-500"
+          "px-3 py-2 border-0 focus:ring-0 outline-none  rounded-none text-sm rounded-l-md bg-coolGray-700  border-collapse focus:border-b-2 focus:border-lightBlue-500"
         }
         placeholder={"Group ID"}
       />
@@ -136,7 +136,7 @@ const JoinGroup = ({ onJoin }) => {
         ref={keyRef}
         type={"text"}
         className={
-          "px-3 py-2  border-0 focus:ring-0 text-sm bg-coolGray-700 rounded-none w-20 border-collapse focus:border-b-2 focus:border-lightBlue-500  "
+          "px-3 py-2  border-0 outline-none focus:ring-0 text-sm bg-coolGray-700 rounded-none w-20 border-collapse focus:border-b-2 focus:border-lightBlue-500  "
         }
         placeholder={"KEY"}
       />
