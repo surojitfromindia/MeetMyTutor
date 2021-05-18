@@ -29,7 +29,6 @@ export default function Dashboard() {
   const handleshowNav = () => {
     setShowNav(!showNav);
   };
-  const [cN, seCN] = useState("");
   useEffect(() => {
     RAPI()
       .get("/user")

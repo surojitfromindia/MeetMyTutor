@@ -1,9 +1,14 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import Modal from "./Modal";
 import LAPI from "../API/LoginAPI";
 import RAPI from "../API/RequestAPI";
 
 export default function LoginPage({ setToken }) {
+  const [modal, setModal] = useState({
+    show: false,
+    message: "None",
+    type: "message",
+  });
   const eRef = useRef();
   const pRef = useRef();
   const signUp = useRef();
@@ -20,7 +25,10 @@ export default function LoginPage({ setToken }) {
       password: pRef.current.value,
     }).then((lr) => {
       if (lr.data?.message) {
-        console.log(lr.data.message);
+        setModal({ message: lr.data.message, type: "error", show: true });
+        setTimeout(() => {
+          setModal({ show: false });
+        }, 4500);
       } else {
         sessionStorage.setItem("token", lr.data);
         setToken(lr.data);
@@ -38,15 +46,30 @@ export default function LoginPage({ setToken }) {
     RAPI()
       .post("/newsignup", h)
       .then(({ data }) => {
+        console.log(data);
         if (data?.message) {
-          alert(data.message);
+          setModal({ message: data.message, type: "error", show: true });
+          setTimeout(() => {
+            setModal({ show: false });
+          }, 4500);
         } else {
           alert("Done");
         }
+      })
+      .catch((err) => {
+        setModal({
+          message: "Field Validation Failed",
+          type: "error",
+          show: true,
+        });
+        setTimeout(() => {
+          setModal({ show: false });
+        }, 4500);
       });
   };
 
   const goToSignUp = () => {
+    signUp.current.visible = true;
     signUp.current.scrollIntoView({ behavior: "smooth" });
   };
 
@@ -57,20 +80,24 @@ export default function LoginPage({ setToken }) {
     <div
       className={"overflow-y-hidden h-screen  bg-gray-100 dark:bg-coolGray-900"}
     >
-      <div>
-        <Modal show={true} />
+      <div className={"sticky top-0"}>
+        <Modal show={modal.show} message={modal.message} type={modal.type} />
       </div>
       <div ref={signIn} className={"h-screen mx-auto flex  items-center"}>
         <div className={"w-96 mx-auto my-5  dark:bg-transparent p-2"}>
-          <div className={"text-center"}>
+          <div className={"mx-7"}>
             <h1
               className={
-                "my-3 text-2xl font-semibold text-gray-700 dark:text-emerald-400 "
+                "my-3 text-4xl font-poppin font-semibold text-gray-700 dark:text-emerald-400 "
               }
             >
-              Me & My Tutor
+              Me , My Tutor
             </h1>
-            <p className={"text-sm text-gray-600 dark:text-emerald-400"}>
+            <p
+              className={
+                "text-base font-poppin tracking-wide text-gray-600 dark:text-emerald-400"
+              }
+            >
               Enter your email and credentials
             </p>
           </div>
@@ -115,20 +142,19 @@ export default function LoginPage({ setToken }) {
                 ref={pRef}
               />
             </div>
-            <div className={"mb-6 flex flex-col space-y-3"}>
+            <div className={"mb-6 flex flex-row space-x-3"}>
               <button
                 onClick={handleLogin}
                 className={
-                  "w-full tracking-widest px-3 py-2 text-white bg-indigo-500 rounded-md focus:bg-indigo-600 hover:bg-indigo-700 focus:outline-none dark:hover:bg-emerald-800 dark:bg-emerald-600 dark:focus:bg-lightBlue-700"
+                  "transition-colors w-full tracking-widest px-3 py-2 text-white bg-indigo-500 rounded-md focus:bg-indigo-600 hover:bg-indigo-700 focus:outline-none dark:hover:bg-emerald-800 dark:bg-emerald-600 dark:focus:bg-emerald-700"
                 }
               >
                 LOGIN
               </button>
               <button
                 onClick={goToSignUp}
-                className={
-                  "w-full tracking-widest px-3 py-2 text-white bg-indigo-500 rounded-md focus:bg-indigo-600 hover:bg-indigo-700 focus:outline-none dark:hover:bg-emerald-800 dark:bg-green-600 dark:focus:bg-green-700"
-                }
+                className={`transition-colors w-full tracking-widest px-3 py-2 text-emerald-500 hover:text-white focus:text-white  rounded-md border-2 border-emerald-600  
+                  focus:outline-none focus:bg-emerald-600   hover:bg-emerald-600 `}
               >
                 REGISTER
               </button>
@@ -137,7 +163,11 @@ export default function LoginPage({ setToken }) {
         </div>
       </div>
 
-      <div ref={signUp} className={"h-screen mx-auto flex  items-center"}>
+      <div
+        ref={signUp}
+        hidden={false}
+        className={"h-screen mx-auto flex overflow-hidden items-center"}
+      >
         <div className={"w-96 mx-auto my-5  dark:bg-transparent p-2"}>
           <div className={"text-center"}>
             <h1
@@ -145,7 +175,7 @@ export default function LoginPage({ setToken }) {
                 "my-3 text-2xl font-semibold text-gray-700 dark:text-orange-400 "
               }
             >
-              Me & My Tutor (Sign Up)
+              Me , My Tutor (Sign Up)
             </h1>
             <p className={"text-sm text-gray-600 dark:text-orange-400"}>
               Enter your email and credentials
@@ -179,7 +209,6 @@ export default function LoginPage({ setToken }) {
                 NAME
               </label>
               <input
-                autoComplete={"username"}
                 ref={snRef}
                 type="text"
                 className={
@@ -236,7 +265,7 @@ export default function LoginPage({ setToken }) {
               <button
                 onClick={goBack}
                 className={
-                  "w-full tracking-widest px-3 py-2 text-white bg-indigo-500 rounded-md focus:bg-indigo-600 hover:bg-indigo-700 focus:outline-none  dark:bg-transparent "
+                  "w-full hover:underline tracking-widest px-3 py-2 text-white bg-indigo-500 rounded-md focus:bg-indigo-600 hover:bg-indigo-700 focus:outline-none  dark:bg-transparent "
                 }
               >
                 BACK
