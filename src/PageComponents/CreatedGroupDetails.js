@@ -12,7 +12,7 @@ import {
 import { useEffect, useState } from "react";
 import RAPI from "../API/RequestAPI";
 
-export default function CreatedGroupDetails({}) {
+export default function CreatedGroupDetails() {
   const { path, url, params } = useRouteMatch();
   const [ginfo, setGInfo] = useState();
   const [studenIds, setStudentIds] = useState([]);
