@@ -30,6 +30,10 @@ export default function Dashboard() {
     setShowNav(!showNav);
   };
   useEffect(() => {
+    Refresh();
+  }, []);
+
+  const Refresh = () => {
     RAPI()
       .get("/user")
       .then(({ data }) => {
@@ -42,7 +46,7 @@ export default function Dashboard() {
       .then(({ data }) => {
         setsNonHidden(data);
       });
-  }, []);
+  };
 
   /*Get all group infomatios that the user is registered with */
   useEffect(() => {
@@ -101,6 +105,7 @@ export default function Dashboard() {
     await RAPI()
       .post("/group/new", postBody)
       .then(({ data }) => {
+        Refresh();
         setModal({
           show: !modal.show,
           message: data.message.des,
@@ -112,50 +117,74 @@ export default function Dashboard() {
       });
   };
 
+  const handleDeleteGroup = async (gname) => {
+    try {
+      let { data } = await RAPI().delete(`/group/${gname}/delete`);
+      setModal({ message: data.message.des, type: "error", show: true });
+      setTimeout(() => {
+        setModal({ show: false });
+      }, 4500);
+      //delete then refresh
+      Refresh();
+    } catch (err) {}
+  };
+
   const handleCGIOpen = (cgname) => {
     history.push(`/mygroup/${cgname}`);
   };
   return (
-    <div className={"flex flex-col mb-32"}>
-      <Navbar show={showNav} nonHiddenInfo={NonHidden} />
-      <Modal show={modal.show} message={modal.message} type={modal.type} />
-      <Switch>
-        <Route exact path="/" component={() => <Redirect to="/home" />} />
-        <Route
-          exact
-          path="/home"
-          render={() => (
-            <Home
-              groupInformation={groupInformations}
-              createdGroupInfomation={createdGroupInfomation}
-              onJoin={handleJoinGroup}
-              onCGCOpenClick={handleCGIOpen}
-            />
-          )}
-        />
-        <Route exact path="/study/:groupId/all" component={AllLesson} />
-        <Route exact path="/study/:groupId/new" render={() => <NewLesson />} />
-        <Route
-          exact
-          path="/study/:groupId/new/:subject"
-          render={() => <PerSubject />}
-        />
-        <Route
-          exact
-          path="/study/:groupId/old/:subject"
-          render={() => <PerSubject />}
-        />
-        <Route exact path="/study/:groupId/up" component={Group} />
-        <Route
-          exact
-          path="/group/new"
-          render={() => <CreateNewGroup onCreate={handleCreateGroup} />}
-        />
-        <Route
-          path="/mygroup/:gname"
-          render={() => <CreatedGroupDetails />}
-        />
-      </Switch>
+    <div className={"flex flex-col mb-32 lg:items-center"}>
+      <div className={"w-full"}>
+        <Navbar show={showNav} nonHiddenInfo={NonHidden} />
+        <Modal show={modal.show} message={modal.message} type={modal.type} />
+      </div>
+      <div className={"flex flex-col lg:w-11/12"}>
+        <Switch>
+          <Route exact path="/" component={() => <Redirect to="/home" />} />
+          <Route
+            exact
+            path="/home"
+            render={() => (
+              <Home
+                groupInformation={groupInformations}
+                createdGroupInfomation={createdGroupInfomation}
+                onJoin={handleJoinGroup}
+                onCGCOpenClick={handleCGIOpen}
+              />
+            )}
+          />
+          <Route
+            exact
+            path="/study/:groupId/all"
+            render={() => <AllLesson />}
+          />
+          <Route
+            exact
+            path="/study/:groupId/new"
+            render={() => <NewLesson />}
+          />
+          <Route
+            exact
+            path="/study/:groupId/new/:subject"
+            render={() => <PerSubject />}
+          />
+          <Route
+            exact
+            path="/study/:groupId/old/:subject"
+            render={() => <PerSubject />}
+          />
+          <Route exact path="/study/:groupId/up" component={Group} />
+          <Route
+            exact
+            path="/group/new"
+            render={() => <CreateNewGroup onCreate={handleCreateGroup} />}
+          />
+          <Route
+            path="/mygroup/:gname"
+            render={() => <CreatedGroupDetails onDelete={handleDeleteGroup} />}
+          />
+        </Switch>
+      </div>
       <FloatButton showNav={handleshowNav} visiable={showNav} />
     </div>
   );

@@ -78,7 +78,9 @@ export default function LoginPage({ setToken }) {
   };
   return (
     <div
-      className={"overflow-y-hidden h-screen  bg-gray-100 dark:bg-coolGray-900"}
+      className={
+        "overflow-y-hidden  h-screen  bg-gray-100 dark:bg-coolGray-900"
+      }
     >
       <div className={"sticky top-0"}>
         <Modal show={modal.show} message={modal.message} type={modal.type} />
