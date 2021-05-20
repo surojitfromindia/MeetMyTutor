@@ -9,32 +9,39 @@ import NewStudyCard from "../components/HomePageComponents/NewStudyCard";
 
 export default function AllLesson() {
   const { groupId } = useParams();
+  const [authorised, setAuthorised] = useState(true);
   const [groupInfo, setGroupInfo] = useState();
   const [groupInfoFromStudyGroup, setgroupInfoFromStudyGroup] = useState();
 
   //pull new lesson
   useEffect(() => {
     (async () => {
-      await RAPI().get(`/lesson/${groupId}/pull`);
+      try {
+        await RAPI().get(`/lesson/${groupId}/pull`);
+      } catch (err) {
+        setAuthorised(false);
+      }
     })();
   }, [groupId]);
 
   //pull whole group info from usered copied part
   useEffect(() => {
-    (async () => {
-      let { data } = await RAPI().get(`/lesson/${groupId}?time=all`);
-      setGroupInfo(data);
-    })();
-  }, [groupId]);
+    if (authorised)
+      (async () => {
+        let { data } = await RAPI().get(`/lesson/${groupId}?time=all`);
+        setGroupInfo(data);
+      })();
+  }, [groupId, authorised]);
 
   useEffect(() => {
-    (async () => {
-      let { data } = await RAPI().get(`/group/${groupId}`);
-      setgroupInfoFromStudyGroup(data);
-    })();
-  }, [groupId]);
+    if (authorised)
+      (async () => {
+        let { data } = await RAPI().get(`/group/${groupId}`);
+        setgroupInfoFromStudyGroup(data);
+      })();
+  }, [groupId, authorised]);
 
-  return (
+  return authorised ? (
     <div className={"px-5 py-5 mt-3"}>
       {groupInfoFromStudyGroup && (
         <Greet
@@ -60,6 +67,10 @@ export default function AllLesson() {
         )}
         {groupInfo && <OldStudyCard />}
       </div>
+    </div>
+  ) : (
+    <div className={"flex h-screen justify-center items-center"}>
+      UnAuthorised
     </div>
   );
 }

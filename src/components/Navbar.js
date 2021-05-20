@@ -29,6 +29,7 @@ export default function Navbar({ show, nonHiddenInfo }) {
         } overflow-hidden text-sm group-hover:max-h-96   gap-1 font-medium text-gray-200`}
       >
         <OneMenu menu={links[0]} cname={"Home"} isArrowShow={false} />
+        <OneMenu menu={links[1]} cname={"New Group"} isArrowShow={false} />
         
       </div>
     </div>

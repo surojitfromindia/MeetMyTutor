@@ -178,22 +178,22 @@ const TIdRow = ({ onSaveOrEdit, iID, onRmv, tidProps = "" }) => {
         disabled={!editable}
         defaultValue={tidProps}
         className={
-          "px-2 py-2 w-full flex-shrink  border-0  focus:ring-0 outline-none  rounded-none text-sm rounded-l-md bg-coolGray-700  border-collapse focus:border-b-2 focus:border-lightBlue-500"
+          "px-2 py-2 w-full flex-shrink  border-0  focus:ring-0 outline-none  rounded-none text-sm rounded-l-md bg-coolGray-800  border-collapse focus:border-b-2 focus:border-lightBlue-500"
         }
         placeholder={"User ID"}
       />
       <button
         onClick={handleEdit}
-        className={
-          "font-robotoCondensed outline-none w-1/4   py-2 rounded-none font text-sm  tracking-wider focus:outline-none    hover:bg-opacity-95 bg-lightBlue-500 bg-opacity-80 text-warmGray-100"
-        }
+        className={`font-robotoCondensed outline-none w-28   py-2 rounded-none font text-sm  tracking-wider focus:outline-none    hover:bg-opacity-95 ${
+          !editable ? "bg-lightBlue-500" : "bg-emerald-500"
+        } bg-lightBlue-500 bg-opacity-80 text-warmGray-100`}
       >
         {editable ? "SAVE" : "EDIT"}
       </button>
       <button
         onClick={handleRmv}
         className={
-          "font-robotoCondensed outline-none px-5 rounded-none  font text-sm  tracking-wider focus:outline-none  py-2  rounded-r-md hover:bg-opacity-95 bg-red-500 bg-opacity-80 text-warmGray-100"
+          "font-robotoCondensed outline-none w-28 rounded-none  font text-sm  tracking-wider focus:outline-none  py-2  rounded-r-md hover:bg-opacity-95 bg-red-500 bg-opacity-80 text-warmGray-100"
         }
       >
         RE
@@ -201,3 +201,5 @@ const TIdRow = ({ onSaveOrEdit, iID, onRmv, tidProps = "" }) => {
     </div>
   );
 };
+
+export { TIdRow, TeacherList };

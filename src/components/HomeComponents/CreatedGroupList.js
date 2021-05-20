@@ -46,7 +46,15 @@ const GroupCard = ({ cginfo, onOpenClick }) => {
             <span className={"font-robotoCondensed text-2xl"}>
               {cginfo.group_name}
             </span>
-            <div className={"flex flex-row items-center gap-2 "}>
+            <div className={"flex flex-row items-center gap-2  "}>
+              <span
+                className={
+                  "font-medium underline overflow-x-hidden tracking-wider  overflow-ellipsis text-sm"
+                }
+              >
+                {"SK :"}
+                {cginfo.secrateKey}
+              </span>
               <span
                 className={
                   "font-medium overflow-x-hidden tracking-wider w-20 overflow-ellipsis text-sm"
