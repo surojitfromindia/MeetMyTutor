@@ -1,7 +1,7 @@
 /**
  * List Everything about this group
  */
-
+import { TeacherList } from "./CreateNewGroup";
 import {
   Route,
   Switch,
@@ -10,23 +10,29 @@ import {
   Redirect,
   useHistory,
 } from "react-router-dom";
-import Modal from "./Modal";
 import { useEffect, useState } from "react";
 import RAPI from "../API/RequestAPI";
 
-export default function CreatedGroupDetails({ onDelete }) {
+export default function CreatedGroupDetails({
+  onDelete,
+  onTeacherUpdate,
+  ginfoP,
+}) {
   const history = useHistory();
   const { path, url, params } = useRouteMatch();
-  const [ginfo, setGInfo] = useState();
-  const [studenIds, setStudentIds] = useState();
+  const [ginfo, setGInfo] = useState(ginfoP);
+  const [studenIds, setStudentIds] = useState(ginfoP?.studentsId);
+  const [teacherIds, setTeacherIds] = useState(ginfoP?.teachersId);
   const [listOfStudentInfo, setListOfStudentInfo] = useState();
 
   useEffect(() => {
+    console.log("i log");
     (async () => {
       let { data } = await RAPI().get(`/group/${params.gname}/admin`);
       console.log(data);
       setGInfo(data);
       setStudentIds(data.studentsId);
+      setTeacherIds(data.teachersId);
     })();
   }, [params.gname]);
 
@@ -43,7 +49,12 @@ export default function CreatedGroupDetails({ onDelete }) {
 
   const handleDeleteGroup = () => {
     onDelete(ginfo.group_name);
-    history.replace("/");
+    setTimeout(() => {
+      history.replace("/");
+    }, 4500);
+  };
+  const handleTecherUpdate = async (updatedArray) => {
+    onTeacherUpdate(ginfo.group_name, updatedArray);
   };
 
   return (
@@ -93,7 +104,16 @@ export default function CreatedGroupDetails({ onDelete }) {
                   path={`${path}/info`}
                   render={() => <Information studentlist={listOfStudentInfo} />}
                 />
-                <Route exact path={`${path}/teachers`} component={Teachers} />
+                <Route
+                  exact
+                  path={`${path}/teachers`}
+                  render={() => (
+                    <Teachers
+                      teacherIds={teacherIds}
+                      onTeacheUpdated={handleTecherUpdate}
+                    />
+                  )}
+                />
                 <Route
                   exact
                   path={`${path}/settings`}
@@ -121,7 +141,6 @@ export default function CreatedGroupDetails({ onDelete }) {
 }
 
 function Information({ studentlist }) {
-  console.log(studentlist);
   return (
     <div>
       <StudentList studentlist={studentlist} />
@@ -129,8 +148,13 @@ function Information({ studentlist }) {
   );
 }
 
-function Teachers() {
-  return <diV>Teachers</diV>;
+function Teachers({ teacherIds, onTeacheUpdated }) {
+  return (
+    <div className={"w-full lg:w-1/2"}>
+      {" "}
+      <TeacherList teacherIds={teacherIds} onTeacherAdded={onTeacheUpdated} />
+    </div>
+  );
 }
 
 //all kind of admin functions goes here
@@ -173,12 +197,14 @@ function StudentList({ studentlist }) {
       <span className={"text-lg font-poppin "}>Students</span>
       {studentlist && (
         <div>
-          {" "}
           {studentlist.map((student) => (
-            <div className={"text-sm font-robotoCondensed py-1"}>
+            <div
+              key={student.name}
+              className={"text-sm font-robotoCondensed py-1"}
+            >
               {student.name.toUpperCase()}
             </div>
-          ))}{" "}
+          ))}
         </div>
       )}
     </div>

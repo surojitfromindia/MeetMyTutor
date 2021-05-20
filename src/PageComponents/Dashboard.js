@@ -26,6 +26,7 @@ export default function Dashboard() {
   const [NonHidden, setsNonHidden] = useState();
   const [groupInformations, setGroupInformation] = useState([]);
   const [createdGroupInfomation, setCreatedGroupInformation] = useState([]);
+  const [createdGrop, setCreatedGroup] = useState();
   const handleshowNav = () => {
     setShowNav(!showNav);
   };
@@ -53,7 +54,7 @@ export default function Dashboard() {
     let TempList = [];
     if (groupids.length !== 0) {
       groupids.forEach(async (groupid) => {
-        let { data } = await RAPI().get(`/group/${groupid}/`);
+        let { data } = await RAPI().get(`/group/${groupid}`);
         TempList.push(data);
         setGroupInformation([...TempList]);
       });
@@ -116,21 +117,42 @@ export default function Dashboard() {
         }, 3000);
       });
   };
-
+  /*Delete A Group */
   const handleDeleteGroup = async (gname) => {
     try {
       let { data } = await RAPI().delete(`/group/${gname}/delete`);
       setModal({ message: data.message.des, type: "error", show: true });
+      Refresh();
       setTimeout(() => {
         setModal({ show: false });
       }, 4500);
       //delete then refresh
-      Refresh();
     } catch (err) {}
   };
-
+  /*Open a group*/
   const handleCGIOpen = (cgname) => {
+    //get info from groupInformations
+    console.log(createdGroupInfomation);
+    let fil = createdGroupInfomation.filter(
+      (ginfo) => ginfo.group_name === cgname
+    )[0];
+    setCreatedGroup(fil);
     history.push(`/mygroup/${cgname}`);
+  };
+  /*Update teachers of a group */
+  const handleTeacherUpdate = async (gname, updatedArray) => {
+    try {
+      let { data } = await RAPI().post(
+        `/group/${gname}/update/teacher`,
+        updatedArray
+      );
+      setModal({ message: data.message.des, type: "message", show: true });
+      setTimeout(() => {
+        setModal({ show: false });
+      }, 4500);
+      //delete then refresh
+     
+    } catch (err) {}
   };
   return (
     <div className={"flex flex-col mb-32 lg:items-center"}>
@@ -138,7 +160,7 @@ export default function Dashboard() {
         <Navbar show={showNav} nonHiddenInfo={NonHidden} />
         <Modal show={modal.show} message={modal.message} type={modal.type} />
       </div>
-      <div className={"flex flex-col lg:w-11/12"}>
+      <div className={"flex flex-col lg:w-4/5"}>
         <Switch>
           <Route exact path="/" component={() => <Redirect to="/home" />} />
           <Route
@@ -181,7 +203,13 @@ export default function Dashboard() {
           />
           <Route
             path="/mygroup/:gname"
-            render={() => <CreatedGroupDetails onDelete={handleDeleteGroup} />}
+            render={() => (
+              <CreatedGroupDetails
+                onDelete={handleDeleteGroup}
+                onTeacherUpdate={handleTeacherUpdate}
+                ginfoP={createdGrop}
+              />
+            )}
           />
         </Switch>
       </div>
