@@ -11,6 +11,7 @@ export default function NavBarWithButton({ show }) {
       <div className={"px-2 py-2"}>
         <OneMenu menu={links[0]} isArrowShow={false} />
         <OneMenu menu={links[1]} cname={"New Group"} isArrowShow={false} />
+        <OneMenu menu={links[2]} cname={"New Group"} isArrowShow={false} />
       </div>
     </div>
   );

@@ -37,7 +37,7 @@ const GroupCard = ({ cginfo, onOpenClick }) => {
   return (
     <div
       className={
-        "flex flex-col justify-between py-3 px-4 h-44  overflow-y-auto w-full sm:w-80  rounded-md text-gray-200  bg-violet-500"
+        "flex flex-col justify-between py-3 px-4 h-44 sm:w-80 overflow-y-auto   rounded-md text-gray-200  bg-violet-500"
       }
     >
       <div className="flex flex-row justify-between ">
@@ -52,7 +52,6 @@ const GroupCard = ({ cginfo, onOpenClick }) => {
                   "font-medium underline overflow-x-hidden tracking-wider  overflow-ellipsis text-sm"
                 }
               >
-                {"SK :"}
                 {cginfo.secrateKey}
               </span>
               <span

@@ -6,8 +6,9 @@ import Greet from "../components/CommonComponents/Greet";
 import OldStudyCard from "../components/HomePageComponents/OldStudyCard";
 import UpcomigCard from "../components/HomePageComponents/UpcomigCard";
 import NewStudyCard from "../components/HomePageComponents/NewStudyCard";
+import JoinedGroupList from "../components/HomeComponents/JoinedGroupList";
 
-export default function AllLesson() {
+export default function AllLesson({ groupInformation }) {
   const { groupId } = useParams();
   const [authorised, setAuthorised] = useState(true);
   const [groupInfo, setGroupInfo] = useState();
@@ -42,30 +43,47 @@ export default function AllLesson() {
   }, [groupId, authorised]);
 
   return authorised ? (
-    <div className={"px-5 py-5 mt-3"}>
-      {groupInfoFromStudyGroup && (
-        <Greet
-          heading="Hey, Ready to Roll !"
-          backG="to-rose-500 from-red-400"
-          groupName={groupInfoFromStudyGroup.group_name}
-        />
-      )}
-
+    <div
+      className={
+        "px-5 py-3 md:gap-2 flex h-full md:h-screen  flex-col md:flex-row "
+      }
+    >
       <div
         className={
-          "mt-10 grid gap-5  sm:grid-cols-2 md:grid-cols-3  xl:grid-cols-4"
+          "hidden md:rounded-md md:flex  top-0 left-0 bottom-0 overflow-y-auto scrollbar max-w-min px-3"
         }
       >
-        {groupInfo?.NewLesson && (
-          <NewStudyCard
-            gid={groupId}
-            lesson={groupInfo.NewLesson.allSubjects}
+        <div> {<JoinedGroupList glist={groupInformation} />}</div>
+      </div>
+
+      <div>
+        {groupInfoFromStudyGroup && (
+          <Greet
+            heading="Hey, Ready to Roll !"
+            backG="to-rose-500 from-red-400"
+            groupName={groupInfoFromStudyGroup.group_name}
           />
         )}
-        {groupInfo?.NewLesson && (
-          <UpcomigCard gid={groupId} lesson={groupInfo.NewLesson.allSubjects} />
-        )}
-        {groupInfo && <OldStudyCard />}
+
+        <div
+          className={
+            "mt-2 grid gap-3  sm:grid-cols-2 md:grid-cols-3  lg:grid-cols-2"
+          }
+        >
+          {groupInfo?.NewLesson && (
+            <NewStudyCard
+              gid={groupId}
+              lesson={groupInfo.NewLesson.allSubjects}
+            />
+          )}
+          {groupInfo?.NewLesson && (
+            <UpcomigCard
+              gid={groupId}
+              lesson={groupInfo.NewLesson.allSubjects}
+            />
+          )}
+          {groupInfo && <OldStudyCard />}
+        </div>
       </div>
     </div>
   ) : (

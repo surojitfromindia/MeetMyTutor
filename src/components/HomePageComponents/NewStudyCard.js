@@ -5,7 +5,7 @@ export default function NewStudyCard({ lesson = [], gid }) {
   return (
     <div
       className={
-        "transition-all hover:-mx-1 px-5 py-3 rounded-md bg-gradient-to-tr to-orange-400 via-orange-600 from-red-500"
+        "transition-all h-44  hover:-mx-1 px-5 py-3 rounded-md bg-gradient-to-tr to-orange-400 via-orange-600 from-red-500"
       }
     >
       <span className={"font-medium tracking-wider text-lg text-gray-100"}>
