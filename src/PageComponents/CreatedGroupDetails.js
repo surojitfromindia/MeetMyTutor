@@ -69,7 +69,7 @@ export default function CreatedGroupDetails({
         >
           <div
             className={
-              "hidden md:rounded-md md:flex  top-0 left-0 bottom-0 overflow-y-auto scrollbar max-w-min px-2"
+              "hidden md:rounded-md md:flex  top-0 left-0 bottom-0 overflow-y-auto scrollbar min-w-max px-2"
             }
           >
             <CreatedGroupList
@@ -193,23 +193,27 @@ function Settings({ onDelete }) {
       <span className={"text-lg font-poppin px-5"}>Settings</span>
       <div className={"w-full divide-y divide-gray-500"}>
         <div className={"flex flex-col  justify-between py-2 px-5 space-y-1 "}>
-          <span>Change Group Name.</span>
+          <span className={"text-sm font-robotoCondensed"}>
+            Change Group Name.
+          </span>
           <button
             className={
-              "outline-none w-24 font-medium text-sm  tracking-wider focus:outline-none  px-3 py-2  rounded-md hover:bg-opacity-95 bg-red-500 bg-opacity-80 text-warmGray-100"
+              "outline-none w-20 font-medium text-sm  tracking-wider focus:outline-none  px-3 py-1.5  rounded-md hover:bg-opacity-95 bg-red-500 bg-opacity-80 text-warmGray-100"
             }
           >
-            RENAME
+            Rename
           </button>
         </div>
-        <div className={"flex flex-col  justify-between py-2 px-5 space-y-1 "}>
-          <span>
+        <div
+          className={"flex flex-col  justify-between py-1.5 px-5 space-y-1 "}
+        >
+          <span className={"text-sm font-robotoCondensed"}>
             Delete This Group. Caution this operation is not reversable.
           </span>
           <button
             onClick={onDelete}
             className={
-              "outline-none w-24 font-medium text-sm  tracking-wider focus:outline-none  px-3 py-2  rounded-md hover:bg-opacity-95 bg-red-500 bg-opacity-80 text-warmGray-100"
+              "outline-none w-20 font-medium text-sm  tracking-wider focus:outline-none  px-3 py-1.5  rounded-md hover:bg-opacity-95 bg-red-500 bg-opacity-80 text-warmGray-100"
             }
           >
             Delete
@@ -243,16 +247,21 @@ function StudentList({ studentlist }) {
 function LessonAction({ gname }) {
   return (
     <div>
-      <div className={"flex flex-col  px-5 py-2 "}>
+      <div className={"flex flex-col space-y-2  px-5 py-2 "}>
         <span className={"text-lg font-poppin"}>Lesson</span>
-        <div className={"flex flex-col  justify-between space-y-1 "}>
-          <span>
-            Delete This Group. Caution this operation is not reversable.
+        <div className={"flex flex-col  justify-between space-y-2 "}>
+          <span
+            className={
+              "w-2/3 font-robotoCondensed text-sm text-gray-300 tracking-wide"
+            }
+          >
+            Create a newlesson for your students. They will recive the update
+            while the lesson is finalised and pushed
           </span>
           <Link to={`/lesson/create/${gname}`}>
             <button
               className={
-                "outline-none w-20 font-medium text-sm  tracking-wider focus:outline-none  px-3 py-2  rounded-md hover:bg-opacity-95 bg-lightBlue-500 bg-opacity-80 text-warmGray-100"
+                "outline-none w-20 font-medium text-sm  tracking-wider focus:outline-none  px-3 py-1.5  rounded-md hover:bg-opacity-95 bg-lightBlue-500 bg-opacity-80 text-warmGray-100"
               }
             >
               Create

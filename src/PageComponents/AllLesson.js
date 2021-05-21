@@ -50,7 +50,7 @@ export default function AllLesson({ groupInformation }) {
     >
       <div
         className={
-          "hidden md:rounded-md md:flex  top-0 left-0 bottom-0 overflow-y-auto scrollbar max-w-min px-3"
+          "hidden md:rounded-md md:flex  top-0 left-0 bottom-0 overflow-y-auto scrollbar min-w-max px-3"
         }
       >
         <div> {<JoinedGroupList glist={groupInformation} />}</div>
