@@ -5,26 +5,29 @@ import PrgBar from "../components/CommonComponents/PrgBar";
 import AllNewStudy from "../components/StudyGroupCard.js/AllNewStudy";
 
 //A group
-export default function NewLesson() {
+export default function NewLesson({ groupIdProp }) {
   const { groupId } = useParams();
   const [pV, setPv] = useState(0);
   const [max, setMax] = useState(100);
   const [groupInfo, setGroupInfo] = useState();
 
   //pull new lesson
+  //update check if prop is defined the fecth using that prop id
   useEffect(() => {
     (async () => {
-      await RAPI().get(`/lesson/${groupId}/pull`);
+      await RAPI().get(`/lesson/${groupIdProp || groupId}/pull`);
     })();
-  }, [groupId]);
+  }, [groupId, groupIdProp]);
 
   //pull whole group info
   useEffect(() => {
     (async () => {
-      let { data } = await RAPI().get(`/lesson/${groupId}?time=all`);
+      let { data } = await RAPI().get(
+        `/lesson/${groupIdProp || groupId}?time=all`
+      );
       setGroupInfo(data);
     })();
-  }, [groupId]);
+  }, [groupId, groupIdProp]);
 
   //update the progress
   useEffect(() => {

@@ -5,7 +5,7 @@ import NewLessonHome from "../components/LessonCreation/NewLesson/NewLessonHome"
 export default function LessonCreationPage({ gnamelist }) {
   const { gname } = useParams();
   return (
-    <div className={"px-5 py-4"}>
+    <div className={"px-5 "}>
       <div>
         <NewLessonHome gnamelist={gnamelist} gnameP={gname} />
       </div>
