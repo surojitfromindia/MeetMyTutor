@@ -11,6 +11,7 @@ import PerSubject from "./PerSubject";
 import CreateNewGroup from "./CreateNewGroup";
 import Modal from "./Modal";
 import CreatedGroupDetails from "./CreatedGroupDetails";
+import LessonCreationPage from "./LessonCreationPage";
 
 export default function Dashboard() {
   const history = useHistory();
@@ -132,7 +133,6 @@ export default function Dashboard() {
   /*Open a group*/
   const handleCGIOpen = (cgname) => {
     //get info from groupInformations
-    console.log(createdGroupInfomation);
     let fil = createdGroupInfomation.filter(
       (ginfo) => ginfo.group_name === cgname
     )[0];
@@ -151,16 +151,15 @@ export default function Dashboard() {
         setModal({ show: false });
       }, 4500);
       //delete then refresh
-     
     } catch (err) {}
   };
   return (
-    <div className={"flex flex-col mb-32 lg:items-center"}>
+    <div className={"flex flex-col  lg:items-center "}>
       <div className={"w-full"}>
         <Navbar show={showNav} nonHiddenInfo={NonHidden} />
         <Modal show={modal.show} message={modal.message} type={modal.type} />
       </div>
-      <div className={"flex flex-col lg:w-4/5"}>
+      <div className={"flex flex-col w-full"}>
         <Switch>
           <Route exact path="/" component={() => <Redirect to="/home" />} />
           <Route
@@ -178,7 +177,7 @@ export default function Dashboard() {
           <Route
             exact
             path="/study/:groupId/all"
-            render={() => <AllLesson />}
+            render={() => <AllLesson groupInformation={groupInformations} />}
           />
           <Route
             exact
@@ -208,7 +207,22 @@ export default function Dashboard() {
                 onDelete={handleDeleteGroup}
                 onTeacherUpdate={handleTeacherUpdate}
                 ginfoP={createdGrop}
+                createdGroupInfomation={createdGroupInfomation}
+                onCGCOpenClick={handleCGIOpen}
               />
+            )}
+          />
+          <Route
+            exact
+            path="/lesson/create/:gname"
+            render={() => (
+              <LessonCreationPage gnamelist={createdGroupInfomation} />
+            )}
+          />
+          <Route
+            path="/lesson/create/"
+            render={() => (
+              <LessonCreationPage gnamelist={createdGroupInfomation} />
             )}
           />
         </Switch>

@@ -4,7 +4,7 @@ export default function OldStudyCard() {
   return (
     <div
       className={
-        "transition-all hover:-mx-1 px-5 py-3 rounded-md bg-gradient-to-tr  from-indigo-500 via-indigo-600 to-lightBlue-600"
+        "transition-all h-44 hover:-mx-1 px-5 py-3 rounded-md bg-gradient-to-tr  from-indigo-500 via-indigo-600 to-lightBlue-600"
       }
     >
       <span className={"font-medium tracking-wider text-lg text-gray-100"}>

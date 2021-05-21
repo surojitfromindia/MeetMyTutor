@@ -24,13 +24,13 @@ export default function Navbar({ show, nonHiddenInfo }) {
       </div>
 
       <div
-        className={`hidden sm:flex flex-col transition-all delay-100 ease-in-out transform   justify-center  ${
+        className={`hidden sm:flex flex-row transition-all delay-100 ease-in-out transform   justify-center  ${
           show ? "max-h-96 py-1.5" : "max-h-0 my-0"
-        } overflow-hidden text-sm group-hover:max-h-96   gap-1 font-medium text-gray-200`}
+        } overflow-hidden text-sm group-hover:max-h-96 justify-start   gap-4 font-medium text-gray-200`}
       >
         <OneMenu menu={links[0]} cname={"Home"} isArrowShow={false} />
         <OneMenu menu={links[1]} cname={"New Group"} isArrowShow={false} />
-        
+        <OneMenu menu={links[2]} cname={"New Group"} isArrowShow={false} />
       </div>
     </div>
   );

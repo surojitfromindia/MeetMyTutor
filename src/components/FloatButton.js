@@ -4,7 +4,7 @@ export default function FloatButton({ showNav, visiable }) {
   return (
     <div
       className={
-        " flex flex-col   items-end gap-4 justify-center fixed  bottom-10 right-5  "
+        " flex flex-col   items-end gap-4 justify-center fixed  bottom-5 right-5  "
       }
     >
       <div

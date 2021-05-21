@@ -12,14 +12,14 @@ export default function JoinedGroupList({ glist, onJoin }) {
   }, [glist]);
 
   return (
-    <div className={"w-full flex flex-col space-y-6 "}>
+    <div className={"w-full flex flex-col space-y-6 0"}>
       <div className={"flex flex-col space-y-2"}>
         <span className={"font-robotoCondensed text-4xl tracking-wider"}>
           Joined
         </span>
         <div
           className={
-            "w-full flex flex-col   space-y-3 sm:space-y-0 sm:space-x-2 sm:flex-row"
+            "w-full flex flex-col  space-y-3 sm:space-y-0 sm:space-x-2 sm:flex-row"
           }
         >
           <JoinGroup onJoin={onJoin} />
