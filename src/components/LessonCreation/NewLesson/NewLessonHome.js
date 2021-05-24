@@ -7,12 +7,26 @@ import { PlusIcon } from "@heroicons/react/solid";
 import { useState } from "react";
 import { MinusCircleIcon } from "@heroicons/react/outline";
 import { subjectnames } from "../../../utils/subjectlist";
+import CreateALesson from "./CreateALesson";
+
+var sD = {
+  subname: "English",
+  topic: [
+    {
+      type: { typeText: "read" },
+      des: "Read about sand storm from internet",
+    },
+  ],
+};
 
 export default function NewLessonHome({ gnameP, gnamelist }) {
   const [gname] = useState(gnameP);
   const [showsubjectNamModal, setshowSubjectNameModal] = useState(false);
+  const [showCreateLesson, setShowCreateLesson] = useState(true);
   const [, setSelectedGroupInfo] = useState();
   const [sBL, setSBL] = useState([]);
+  const [aSubjectTempLessons, setASubjectTempLessons] = useState("jola");
+  const [createdLessonPreInfo, setCreatedLessonPreInfo] = useState(sD);
 
   const handleGroupNameSelect = (groupName) => {
     let selectedGroupInfo = gnamelist.filter(
@@ -21,7 +35,17 @@ export default function NewLessonHome({ gnameP, gnamelist }) {
     setSelectedGroupInfo(selectedGroupInfo);
     console.log(selectedGroupInfo);
   };
+
+  //open subject select dialog
+  const handAddSubject = () => {
+    setshowSubjectNameModal(true);
+  };
+
+  //when choosem from dialog
+  //add them.
   const handleSubjectSelect = (subjectName) => {
+    //check if a subject is already created with this name
+    //if not push the subjectname to the array
     if (sBL.includes(subjectName)) {
       alert("Already Exist");
     } else {
@@ -31,37 +55,64 @@ export default function NewLessonHome({ gnameP, gnamelist }) {
       setSBL([...tempA]);
     }
   };
-
-  const handAddSubject = () => {
-    setshowSubjectNameModal(true);
+  //Remove subject from list
+  //also from tempdb
+  const handleSubjectRemove = (subjectName) => {
+    let tempA = sBL.filter((s) => s !== subjectName);
+    setSBL([...tempA]);
   };
 
+  //open the subject
+  //open a new link where you can add/create questions/quiz/ explnations
+  const handleSubjectOpen = (subjectName) => {};
+
   return (
-    <div className={"flex flex-col  space-y-3 relative "}>
-      <div
-        className={` ${
-          gname ? "hidden" : "absolute"
-        } bg-coolGray-800 bg-opacity-90  flex justify-center items-center  top-0 right-0 bottom-0 left-0`}
-      >
-        <AskGnameModal gnamelist={gnamelist} onSelect={handleGroupNameSelect} />
-      </div>
-      <div
-        className={` ${
-          showsubjectNamModal ? "absolute" : "hidden"
-        } bg-coolGray-800 bg-opacity-90  flex justify-center items-center top-0 right-0 bottom-0 left-0`}
-      >
-        <AskSubjectNameModal
-          onClose={(ev) => {
-            setshowSubjectNameModal(false);
-          }}
-          onSelect={handleSubjectSelect}
-        />
-      </div>
-      <NewLessonCreateButton />
+    <div className={"flex flex-col relative min-h-screen  "}>
       <div>
-        <CPanel subjects={sBL} onAddSubject={handAddSubject} />
+        <div
+          className={` ${
+            gname ? "hidden" : "absolute"
+          } bg-coolGray-800 bg-opacity-90  flex justify-center items-center  top-0 right-0 bottom-0 left-0`}
+        >
+          <AskGnameModal
+            gnamelist={gnamelist}
+            onSelect={handleGroupNameSelect}
+          />
+        </div>
+        <div
+          className={` ${
+            showsubjectNamModal ? "fixed" : "hidden"
+          } bg-coolGray-800 bg-opacity-90  flex justify-center items-center top-0 right-0 bottom-0 left-0`}
+        >
+          <AskSubjectNameModal
+            onClose={(ev) => {
+              setshowSubjectNameModal(false);
+            }}
+            onSelect={handleSubjectSelect}
+          />
+        </div>
       </div>
-      <CurrentNewLesson />
+      <div className={"flex flex-col space-y-3"}>
+        <NewLessonCreateButton />
+        <div>
+          <CPanel
+            subjects={sBL}
+            onAddSubject={handAddSubject}
+            onRemoveSubject={handleSubjectRemove}
+            onOpenSubject={handleSubjectOpen}
+          />
+        </div>
+        <CurrentNewLesson />
+      </div>
+      {aSubjectTempLessons && (
+        <CreateALesson
+          show={showCreateLesson}
+          onclose={() => {
+            setShowCreateLesson(false);
+          }}
+          lessonDetails={createdLessonPreInfo}
+        />
+      )}
     </div>
   );
 }
@@ -128,7 +179,7 @@ function AskGnameModal({ gnamelist, onSelect }) {
 
 //will hold subject panel with edit button
 //this will open a dialog with a question which subject name to be added.
-function CPanel({ subjects, onAddSubject }) {
+function CPanel({ subjects, onAddSubject, onRemoveSubject, onOpenSubject }) {
   return (
     <div className={"rounded-md flex flex-col bg-coolGray-600 px-5 py-2"}>
       <span className={"font-poppin text-lg tracking-wide"}>
@@ -145,7 +196,16 @@ function CPanel({ subjects, onAddSubject }) {
           {subjects && (
             <div className={"flex flex-col gap-2 md:flex-row md:flex-wrap"}>
               {subjects.map((s) => (
-                <SubjectCard key={s} tempSubjectDetails={s} />
+                <SubjectCard
+                  key={s}
+                  tempSubjectDetails={s}
+                  onRemove={() => {
+                    onRemoveSubject(s);
+                  }}
+                  onOpen={() => {
+                    onOpenSubject(s);
+                  }}
+                />
               ))}
             </div>
           )}
@@ -163,9 +223,20 @@ function CPanel({ subjects, onAddSubject }) {
   );
 }
 
-function SubjectCard({ tempSubjectDetails }) {
+function SubjectCard({ tempSubjectDetails, onRemove, onOpen }) {
+  const handleSubjectCardClick = (ev) => {
+    ev.preventDefault();
+    ev.stopPropagation();
+    onOpen();
+  };
+  const handleRemove = (ev) => {
+    ev.preventDefault();
+    ev.stopPropagation();
+    onRemove();
+  };
   return (
     <div
+      onClick={handleSubjectCardClick}
       className={
         "md:w-1/3 flex-shrink-0 flex flex-col  space-y-3  bg-coolGray-700 px-4 py-4 rounded"
       }
@@ -174,7 +245,7 @@ function SubjectCard({ tempSubjectDetails }) {
         <div className={"text-xl tracking-wider text-orange-300"}>
           {tempSubjectDetails}
         </div>
-        <div>
+        <div onClick={handleRemove} className={"cursor-pointer"}>
           <MinusCircleIcon className={"h-5 w-5"} />
         </div>
       </div>
@@ -219,7 +290,7 @@ function AskSubjectNameModal({ onSelect, onClose }) {
   };
   const handleSelectFromPref = (ev) => {
     onSelect(ev.target.id);
-    console.log(ev.target.id);
+    console.log(ev.target.id + " Selected ");
   };
   return (
     <div>
