@@ -13,8 +13,8 @@ var sD = {
   subname: "English",
   topic: [
     {
-      type: { typeText: "read" },
-      des: "Read about sand storm from internet",
+      type: { typeText: "READ" },
+      des: "Read about sand storm from internet. It is an important topic. Just open a wikipedia page and read first few lines then open page 25 of your book.",
     },
   ],
 };
@@ -67,7 +67,7 @@ export default function NewLessonHome({ gnameP, gnamelist }) {
   const handleSubjectOpen = (subjectName) => {};
 
   return (
-    <div className={"flex flex-col relative min-h-screen  "}>
+    <div className={"flex flex-col relative min-h-screen mt-5  "}>
       <div>
         <div
           className={` ${
@@ -181,7 +181,7 @@ function AskGnameModal({ gnamelist, onSelect }) {
 //this will open a dialog with a question which subject name to be added.
 function CPanel({ subjects, onAddSubject, onRemoveSubject, onOpenSubject }) {
   return (
-    <div className={"rounded-md flex flex-col bg-coolGray-600 px-5 py-2"}>
+    <div className={"rounded-md flex flex-col bg-coolGray-600 px-5 py-4"}>
       <span className={"font-poppin text-lg tracking-wide"}>
         Write Lesson Down.
       </span>
