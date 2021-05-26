@@ -4,19 +4,24 @@ export default function OldStudyCard() {
   return (
     <div
       className={
-        "transition-all h-44 hover:-mx-1 px-5 py-3 rounded-md bg-gradient-to-tr  from-indigo-500 via-indigo-600 to-lightBlue-600"
+        "h-44 px-5 py-3 flex flex-col justify-between rounded-md bg-gradient-to-tr  from-indigo-500 via-indigo-600 to-lightBlue-600"
       }
     >
-      <span className={"font-medium tracking-wider text-lg text-gray-100"}>
-        PRIVIOUS
-      </span>
-      <span className={"block leading-4 text-sm   text-lightBlue-200 "}>
-        view upcoming lessions in advance. topics will be coverd in next classes
-      </span>
+      <div className={"flex flex-col"}>
+        <span className={"font-medium tracking-wider text-lg text-gray-100"}>
+          PRIVIOUS
+        </span>
+        <span className={"block leading-4 text-sm   text-lightBlue-200 "}>
+          view upcoming lessions in advance. topics will be coverd in next
+          classes
+        </span>
 
-      <div className={"block leading-5 text-sm mb-4 mt-1.5"}>
-        <span className={"text-xl  text-coolGray-200 font-medium"}>5</span>
-        <span className={"text-sm text-coolGray-200 ml-1"}>new excersise</span>
+        <div className={"block leading-5 text-sm mb-4 mt-1.5"}>
+          <span className={"text-xl  text-coolGray-200 font-medium"}>5</span>
+          <span className={"text-sm text-coolGray-200 ml-1"}>
+            new excersise
+          </span>
+        </div>
       </div>
       <div className={"flex justify-start"}>
         <button
