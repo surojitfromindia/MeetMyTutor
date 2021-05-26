@@ -50,13 +50,17 @@ export default function AllLesson({ groupInformation }) {
     >
       <div
         className={
-          "hidden md:rounded-md md:flex  top-0 left-0 bottom-0 overflow-y-auto scrollbar min-w-max px-3"
+          "hidden md:rounded-md md:flex  md:max-w-min md:min-w-min overflow-y-auto scrollbar px-3"
         }
       >
         <div> {<JoinedGroupList glist={groupInformation} />}</div>
       </div>
 
-      <div>
+      <div
+        className={
+          "overflow-y-auto scrollbar"
+        }
+      >
         {groupInfoFromStudyGroup && (
           <Greet
             heading="Hey, Ready to Roll !"
@@ -65,11 +69,7 @@ export default function AllLesson({ groupInformation }) {
           />
         )}
 
-        <div
-          className={
-            "mt-2 grid gap-3  sm:grid-cols-2 md:grid-cols-3  lg:grid-cols-2"
-          }
-        >
+        <div className={"mt-2  grid  gap-2  lg:grid-cols-2  xl:grid-cols-3 "}>
           {groupInfo?.NewLesson && (
             <NewStudyCard
               gid={groupId}

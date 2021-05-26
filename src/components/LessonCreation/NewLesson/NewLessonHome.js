@@ -4,12 +4,14 @@
  * Will publish them separately
  */
 import { PlusIcon } from "@heroicons/react/solid";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { MinusCircleIcon } from "@heroicons/react/outline";
 import { subjectnames } from "../../../utils/subjectlist";
 import CreateALesson from "./CreateALesson";
+import { useRef } from "react";
+import RAPI from "../../../API/RequestAPI";
 
-var sD = {
+/* var sD = {
   subname: "English",
   topic: [
     {
@@ -17,23 +19,31 @@ var sD = {
       des: "Read about sand storm from internet. It is an important topic. Just open a wikipedia page and read first few lines then open page 25 of your book.",
     },
   ],
-};
+}; */
 
 export default function NewLessonHome({ gnameP, gnamelist }) {
-  const [gname] = useState(gnameP);
-  const [showsubjectNamModal, setshowSubjectNameModal] = useState(false);
-  const [showCreateLesson, setShowCreateLesson] = useState(true);
-  const [, setSelectedGroupInfo] = useState();
   const [sBL, setSBL] = useState([]);
-  const [aSubjectTempLessons, setASubjectTempLessons] = useState("jola");
-  const [createdLessonPreInfo, setCreatedLessonPreInfo] = useState(sD);
+  const [selectedGroupInfo, setSelectedGroupInfo] = useState();
+  const [createdLessonPreInfo, setCreatedLessonPreInfo] = useState();
+
+  useEffect(() => {
+    // localStorage.removeItem("recentSubject");
+    let groupInfo = gnamelist.filter((group) => group.group_name === gnameP)[0];
+    setSelectedGroupInfo(groupInfo);
+    if (groupInfo?.TempLesson) setSBL(groupInfo?.TempLesson?.allSubjects);
+  }, [gnameP, gnamelist]);
+
+  const [gname, setGname] = useState(gnameP);
+  const [showsubjectNamModal, setshowSubjectNameModal] = useState(false);
+  const [showCreateLesson, setShowCreateLesson] = useState(false);
 
   const handleGroupNameSelect = (groupName) => {
     let selectedGroupInfo = gnamelist.filter(
       (group) => group.group_name === groupName
     )[0];
     setSelectedGroupInfo(selectedGroupInfo);
-    console.log(selectedGroupInfo);
+    setGname(selectedGroupInfo.group_name);
+    setSBL(selectedGroupInfo?.NewLesson?.allSubjects);
   };
 
   //open subject select dialog
@@ -44,15 +54,27 @@ export default function NewLessonHome({ gnameP, gnamelist }) {
   //when choosem from dialog
   //add them.
   const handleSubjectSelect = (subjectName) => {
-    //check if a subject is already created with this name
-    //if not push the subjectname to the array
-    if (sBL.includes(subjectName)) {
+    //check if a subject is already exist/created with this name
+    //if not push the subject to the array
+    let InSL = sBL.find(({ subName }) => subName === subjectName);
+    if (InSL) {
       alert("Already Exist");
     } else {
       setshowSubjectNameModal(false);
       let tempA = sBL;
-      tempA.push(subjectName);
+      tempA.push({
+        subName: subjectName,
+        topic: [],
+        question: [],
+      });
       setSBL([...tempA]);
+      console.log(selectedGroupInfo._id);
+      RAPI()
+        .post(`/lesson/${selectedGroupInfo._id}/temp`, sBL)
+        .then((res) => console.log(res.data))
+        .catch((err) => {
+          console.log(err);
+        });
     }
   };
   //Remove subject from list
@@ -62,9 +84,28 @@ export default function NewLessonHome({ gnameP, gnamelist }) {
     setSBL([...tempA]);
   };
 
+  const handleASubjectUpdate = (updateSubjectLesson) => {
+    //get the index
+    let b = sBL.findIndex(
+      ({ subName }) => subName === updateSubjectLesson.subName
+    );
+    let sbLTemp = sBL;
+    sbLTemp[b] = updateSubjectLesson;
+    setSBL([...sbLTemp]);
+    RAPI()
+      .post(`/lesson/${selectedGroupInfo._id}/temp`, sBL)
+      .then((res) => console.log(res.data))
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   //open the subject
   //open a new link where you can add/create questions/quiz/ explnations
-  const handleSubjectOpen = (subjectName) => {};
+  const handleSubjectOpen = ({ subName }) => {
+    let aSubject = sBL.filter((subject) => subject.subName === subName)[0];
+    setCreatedLessonPreInfo(aSubject);
+    setShowCreateLesson(true);
+  };
 
   return (
     <div className={"flex flex-col relative min-h-screen mt-5  "}>
@@ -93,6 +134,7 @@ export default function NewLessonHome({ gnameP, gnamelist }) {
         </div>
       </div>
       <div className={"flex flex-col space-y-3"}>
+        {selectedGroupInfo && <div>{selectedGroupInfo.group_name}</div>}
         <NewLessonCreateButton />
         <div>
           <CPanel
@@ -104,11 +146,13 @@ export default function NewLessonHome({ gnameP, gnamelist }) {
         </div>
         <CurrentNewLesson />
       </div>
-      {aSubjectTempLessons && (
+      {createdLessonPreInfo && (
         <CreateALesson
           show={showCreateLesson}
+          onSave={handleASubjectUpdate}
           onclose={() => {
             setShowCreateLesson(false);
+            setCreatedLessonPreInfo(undefined);
           }}
           lessonDetails={createdLessonPreInfo}
         />
@@ -151,6 +195,10 @@ function CurrentNewLesson() {
 }
 
 function AskGnameModal({ gnamelist, onSelect }) {
+  const selectRef = useRef();
+  useEffect(() => {
+    selectRef.current.selectedIndex = -1;
+  }, [gnamelist]);
   const handleSelect = (ev) => {
     onSelect(ev.target.value);
   };
@@ -163,6 +211,7 @@ function AskGnameModal({ gnamelist, onSelect }) {
       >
         <span className={"text-2xl font-poppin"}>Select A Group</span>
         <select
+          ref={selectRef}
           onChange={handleSelect}
           className={"text-gray-600 w-40 px-2 py-1.5 font-robotoCondensed"}
         >
@@ -181,23 +230,23 @@ function AskGnameModal({ gnamelist, onSelect }) {
 //this will open a dialog with a question which subject name to be added.
 function CPanel({ subjects, onAddSubject, onRemoveSubject, onOpenSubject }) {
   return (
-    <div className={"rounded-md flex flex-col bg-coolGray-600 px-5 py-4"}>
+    <div className={"rounded-md flex flex-col gap-3 bg-coolGray-600 px-3 py-4"}>
       <span className={"font-poppin text-lg tracking-wide"}>
         Write Lesson Down.
       </span>
       <span
-        className={"font-poppin text-gray-300 max-w-lg  text-sm tracking-wide"}
+        className={"font-poppin text-gray-300 max-w-lg  text-xs tracking-wide"}
       >
         Click 'Add' to create a subject lesson. You can also edit already
         created subjects by clicking edit on corrosponding subjects.
       </span>
-      <div className={"flex flex-col space-y-2 mt-5"}>
+      <div className={"flex flex-col space-y-2 mt-2"}>
         <div className={""}>
           {subjects && (
             <div className={"flex flex-col gap-2 md:flex-row md:flex-wrap"}>
               {subjects.map((s) => (
                 <SubjectCard
-                  key={s}
+                  key={s.subName}
                   tempSubjectDetails={s}
                   onRemove={() => {
                     onRemoveSubject(s);
@@ -238,12 +287,12 @@ function SubjectCard({ tempSubjectDetails, onRemove, onOpen }) {
     <div
       onClick={handleSubjectCardClick}
       className={
-        "md:w-1/3 flex-shrink-0 flex flex-col  space-y-3  bg-coolGray-700 px-4 py-4 rounded"
+        " flex-shrink-0 flex flex-col  space-y-3  bg-coolGray-700 px-4 py-4 rounded"
       }
     >
       <div className={"flex flex-row justify-between"}>
         <div className={"text-xl tracking-wider text-orange-300"}>
-          {tempSubjectDetails}
+          {tempSubjectDetails?.subName}
         </div>
         <div onClick={handleRemove} className={"cursor-pointer"}>
           <MinusCircleIcon className={"h-5 w-5"} />
@@ -252,11 +301,17 @@ function SubjectCard({ tempSubjectDetails, onRemove, onOpen }) {
       <div className={"flex flex-row gap-2 text-sm flex-wrap"}>
         <div className={"flex flex-col space-y"}>
           <span className={"text-gray-200 tracking-wide"}>TASK(S)</span>
-          <span className={"text-gray-300 font-poppin text-lg"}> 4 </span>
+          <span className={"text-gray-300 font-poppin text-lg"}>
+            {" "}
+            {tempSubjectDetails?.topic.length}{" "}
+          </span>
         </div>
         <div className={"flex flex-col space-y"}>
           <span className={"text-gray-200 tracking-wide"}>QUESTION(S)</span>
-          <span className={"text-gray-300 font-poppin text-lg"}> 10 </span>
+          <span className={"text-gray-300 font-poppin text-lg"}>
+            {" "}
+            {tempSubjectDetails?.question.length}{" "}
+          </span>
         </div>
         <div className={"flex flex-col space-y"}>
           <span className={"text-gray-200 tracking-wide"}>QUIZ(S)</span>
@@ -284,13 +339,14 @@ function SubjectCard({ tempSubjectDetails, onRemove, onOpen }) {
 function AskSubjectNameModal({ onSelect, onClose }) {
   const [prefSubjects, setPrefSubject] = useState(getPreSubjects());
   const handleSelect = (ev) => {
-    onSelect(ev.target.value);
-    pushPrefSubject(ev.target.value);
-    setPrefSubject(getPreSubjects());
+    if (ev.target.value !== "") {
+      onSelect(ev.target.value);
+      pushPrefSubject(ev.target.value);
+      setPrefSubject(getPreSubjects());
+    }
   };
   const handleSelectFromPref = (ev) => {
-    onSelect(ev.target.id);
-    console.log(ev.target.id + " Selected ");
+    if (ev.target.value !== "") onSelect(ev.target.id);
   };
   return (
     <div>
@@ -304,6 +360,7 @@ function AskSubjectNameModal({ onSelect, onClose }) {
           onChange={handleSelect}
           className={"text-gray-600 w-56 px-2 py-1.5 font-robotoCondensed"}
         >
+          <option value=" ">--Subject--</option>
           {subjectnames.map((name) => (
             <option key={name} value={name}>
               {name}

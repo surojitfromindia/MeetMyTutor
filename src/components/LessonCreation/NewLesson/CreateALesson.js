@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import {
   MinusCircleIcon as MCI,
   PencilIcon,
@@ -6,27 +6,25 @@ import {
   PlusSmIcon,
 } from "@heroicons/react/outline";
 
-export default function CreateALesson({ lessonDetails, onclose, show = true }) {
+export default function CreateALesson({
+  lessonDetails,
+  onclose,
+  show = true,
+  onSave,
+}) {
   const [topics, setTopics] = useState(lessonDetails.topic);
-  const [currentOpenTab, setCurrentOpenTab] = useState(
-    <TopicTab
-      preTopic={topics}
-      onTopicUpdate={(g) => {
-        setTopics([...g]);
-      }}
-    />
-  );
-
-  const tabs = ["Quiz", "Questions", "Topic", "Note"];
-  const handleTabItemChanged = (index) => {
-    switch (index) {
+  const [tabIndex, setTabIndex] = useState(0);
+  const [currentOpenTab, setCurrentOpenTab] = useState();
+  useEffect(() => {
+    switch (tabIndex) {
       case 0:
         setCurrentOpenTab(<div>Quiz</div>);
         break;
       case 2:
+        console.log(topics);
         setCurrentOpenTab(
           <TopicTab
-            preTopic={topics}
+            preTopic={lessonDetails.topic}
             onTopicUpdate={(g) => {
               setTopics([...g]);
             }}
@@ -36,31 +34,53 @@ export default function CreateALesson({ lessonDetails, onclose, show = true }) {
       default:
         setCurrentOpenTab(<div>Quiz</div>);
     }
+  }, [tabIndex, lessonDetails, topics]);
+
+  const tabs = ["Quiz", "Questions", "Topic", "Note"];
+  const handleTabItemChanged = (index) => {
+    setTabIndex(index);
   };
 
+  const handleMegaSave = () => {
+    let updatedLessonDetails = lessonDetails;
+    updatedLessonDetails.topic = topics;
+    onSave(updatedLessonDetails);
+  };
   return (
     <div
       className={`${
         show ? "fixed" : "hidden"
-      } bg-coolGray-700  overflow-y-auto shadow-xl scrollbar inset-4 lg:inset-28 rounded-md`}
+      } bg-coolGray-700 flex flex-col justify-between   overflow-y-auto shadow-xl scrollbar inset-4 lg:inset-28 rounded-md`}
     >
-      <div className={"sticky top-0 bg-coolGray-700 px-5 py-3 "}>
-        <div className={"flex justify-between items-center "}>
-          <div className={"text-xl"}>{lessonDetails?.subname}</div>
-          <MCI
-            onClick={(ev) => {
-              onclose();
-            }}
-            className={"h-7 w-7"}
-          />
+      <div>
+        <div className={"sticky top-0 bg-coolGray-700 px-3 py-3 "}>
+          <div className={"flex justify-between items-center "}>
+            <div className={"text-xl"}>{lessonDetails?.subName}</div>
+            <MCI
+              onClick={(ev) => {
+                onclose();
+              }}
+              className={"h-7 w-7"}
+            />
+          </div>
+          <div></div>
+          <div className={"mt-4 "}>
+            <Tab children={tabs} onTabItemChanged={handleTabItemChanged} />
+          </div>
+          <div className={"mt-1 border-t-2 w-full bg-white"}></div>
         </div>
-        <div></div>
-        <div className={"mt-4 "}>
-          <Tab children={tabs} onTabItemChanged={handleTabItemChanged} />
-        </div>
-        <div className={"mt-1 border-t-2 w-full bg-white"}></div>
+        <div className={"px-3 pb-3"}>{currentOpenTab && currentOpenTab}</div>
       </div>
-      <div className={"px-5 pb-3"}>{currentOpenTab && currentOpenTab}</div>
+
+      <button
+        onClick={handleMegaSave}
+        className={
+          "outline-none flex flex-row gap-1 items-center h-10   font-medium text-sm  tracking-wider focus:outline-none  px-2.5   rounded-sm hover:bg-opacity-95 bg-teal-500 bg-opacity-80 text-warmGray-100"
+        }
+      >
+        <SaveIcon className={"w-4 h-4"} />
+        SAVE
+      </button>
     </div>
   );
 }
@@ -70,7 +90,7 @@ function Tab({
   onTabItemChanged,
   children = ["Quiz", "Question"],
 }) {
-  const [current, setcurrent] = useState(2);
+  const [current, setcurrent] = useState(0);
   const handleTabChange = (index) => {
     setcurrent(index);
     onTabItemChanged(index);
@@ -219,28 +239,3 @@ function TopicCard({ topic, onSave }) {
     </div>
   );
 }
-
-/* function FloatingCButton() {
-  return (
-    <div
-      className={
-        " flex flex-col   items-end gap-4 justify-center absolute     "
-      }
-    >
-      <div
-        className={
-          "w-40 -mr-2 bg-gradient-to-tr from-lightBlue-600 to-indigo-400 rounded-md sm:hidden"
-        }
-      ></div>
-
-      <div
-        style={{ width: "52px", height: "52px" }}
-        className={
-          "justify-center items-center flex rounded-full bg-gradient-to-tr from-lightBlue-700 to-indigo-800 "
-        }
-      >
-        <SaveIcon className={"w-6 h-6 text-gray-50 "} />
-      </div>
-    </div>
-  );
-} */

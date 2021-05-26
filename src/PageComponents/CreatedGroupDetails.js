@@ -69,7 +69,7 @@ export default function CreatedGroupDetails({
         >
           <div
             className={
-              "hidden md:rounded-md md:flex  top-0 left-0 bottom-0 overflow-y-auto scrollbar min-w-max px-2"
+              "hidden md:rounded-md md:flex  md:max-w-min md:min-w-min overflow-y-auto scrollbar px-3"
             }
           >
             <CreatedGroupList
