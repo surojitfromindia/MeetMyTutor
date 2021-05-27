@@ -125,12 +125,12 @@ const TeacherList = ({ onTeacherAdded, teacherIds = [] }) => {
         </div>
       )}
 
-      <div className={"flex space-x-2  font-robotoCondensed"}>
+      <div className={"flex space-x-2 "}>
         <button
           onClick={handleAdd}
           disabled={isFinalized}
           className={
-            "outline-none disabled:bg-opacity-40  w-24 font text-sm  tracking-wider focus:outline-none  px-1 py-2 hover:bg-opacity-95 bg-orange-500 bg-opacity-80 text-warmGray-100"
+            "outline-none rounded-md disabled:bg-opacity-40  w-24 font text-sm  tracking-wider focus:outline-none  px-1 py-2 hover:bg-opacity-95 bg-lightBlue-500 bg-opacity-80 text-warmGray-100"
           }
         >
           ADD
@@ -146,7 +146,7 @@ const TeacherList = ({ onTeacherAdded, teacherIds = [] }) => {
             if (!isFinalized) onTeacherAdded(tids);
           }}
           className={
-            "outline-none w-24  font text-sm  tracking-wider focus:outline-none  px-1 py-2 hover:bg-opacity-95 bg-orange-500 bg-opacity-80 text-warmGray-100"
+            "outline-none w-24  rounded-md font text-sm  tracking-wider focus:outline-none  px-1 py-2 hover:bg-opacity-95 bg-orange-500 bg-opacity-80 text-warmGray-100"
           }
         >
           {isFinalized ? "EDIT" : "FINAL"}
