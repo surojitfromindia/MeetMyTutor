@@ -179,7 +179,7 @@ function Information({ studentlist, gname }) {
 
 function Teachers({ teacherIds, onTeacheUpdated }) {
   return (
-    <div className={"w-full lg:w-1/2"}>
+    <div className={"w-full lg:w-1/2 px-5 py-2"}>
       {" "}
       <TeacherList teacherIds={teacherIds} onTeacherAdded={onTeacheUpdated} />
     </div>
