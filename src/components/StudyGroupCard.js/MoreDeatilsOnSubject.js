@@ -12,7 +12,7 @@ export default function MoreDeatilsOnSubject({
   return (
     <div
       id={subjectData?.subjectName}
-      className={`flex flex-col justify-between transition-all hover:-mx-1 px-5 py-3 rounded-md bg-gradient-to-tr  ${
+      className={`flex flex-col justify-between  px-5 py-3 rounded-md bg-gradient-to-tr  ${
         isAllDone ? doneG : backG
       }`}
     >

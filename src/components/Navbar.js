@@ -7,7 +7,7 @@ export default function Navbar({ show, nonHiddenInfo }) {
   return (
     <div
       className={
-        "group bg-gradient-to-tr from-lightBlue-600 to-indigo-400 px-5 py-5   text-gray-100"
+        "group bg-gradient-to-tr from-red-500  to-violet-600  px-5 py-5   text-gray-100"
       }
     >
       <div

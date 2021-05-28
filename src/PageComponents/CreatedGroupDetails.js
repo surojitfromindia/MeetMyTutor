@@ -60,7 +60,7 @@ export default function CreatedGroupDetails({
   };
 
   return (
-    <div className={"px-5 py-4 space-y-3 relative"}>
+    <div className={"px-5 py-4  relative"}>
       {studenIds ? (
         <div
           className={
@@ -77,7 +77,7 @@ export default function CreatedGroupDetails({
               onCGCOpenClick={onCGCOpenClick}
             />
           </div>
-          <div className={"space-y-3 md:w-full"}>
+          <div className={"space-y-3 md:w-2/3"}>
             <div
               className={
                 "text-sm text-gray-300 tracking-wider font-robotoCondensed"
@@ -249,16 +249,16 @@ function LessonAction({ gname }) {
     <div>
       <div className={"flex flex-col space-y-2  px-5 py-2 "}>
         <span className={"text-lg font-poppin"}>Lesson</span>
-        <div className={"flex flex-col  justify-between space-y-2 "}>
+        <div className={"flex flex-col  justify-between space-y-3 "}>
           <span
             className={
-              "w-2/3 font-robotoCondensed text-sm text-gray-300 tracking-wide"
+              "w-3/4 font-robotoCondensed text-sm text-gray-300 tracking-wide"
             }
           >
             Create a newlesson for your students. They will recive the update
             while the lesson is finalised and pushed
           </span>
-          <Link to={`/lesson/create/${gname}`}>
+          <Link className={"w-max"} to={`/lesson/create/${gname}`}>
             <button
               className={
                 "outline-none w-20 font-medium text-sm  tracking-wider focus:outline-none  px-3 py-1.5  rounded-md hover:bg-opacity-95 bg-lightBlue-500 bg-opacity-80 text-warmGray-100"

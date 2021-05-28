@@ -44,7 +44,7 @@ const GroupCard = ({ ginfo }) => {
   return (
     <div
       className={
-        "shadow-2xl flex flex-col justify-between py-3 px-4 h-44  overflow-y-auto w-full sm:w-80  rounded-md text-gray-200  bg-lightBlue-600 "
+        "bg-gradient-to-br from-red-500  to-violet-600 shadow-2xl flex flex-col justify-between py-3 px-4 h-44  overflow-y-auto w-full sm:w-80  rounded-md text-gray-200"
       }
     >
       <div className="flex flex-row justify-between ">
@@ -53,12 +53,12 @@ const GroupCard = ({ ginfo }) => {
             {ginfo.group_name}
           </div>
           <div className={"flex  flex-row items-center space-x-2"}>
-            <div className={"text-lightBlue-200 text-md font-medium"}>
+            <div className={"text-red-200 text-md font-medium"}>
               {ginfo.admin}
             </div>
             <div
               className={
-                "text-gray-300 font-poppin font-medium text-xs  py-0.5 px-1.5 rounded-md bg-lightBlue-700"
+                "text-gray-50 font-poppin font-medium text-xs  py-0.5 px-1.5 rounded-md bg-opacity-50 bg-rose-300"
               }
             >
               Admin
@@ -105,7 +105,7 @@ const GroupCard = ({ ginfo }) => {
         <Link to={`/study/${ginfo._id}/all`}>
           <button
             className={
-              "outline-none  font-medium text-sm  tracking-wider focus:outline-none  px-3 py-1 rounded-md hover:bg-opacity-95 bg-lightBlue-500 bg-opacity-80 text-warmGray-100"
+              "outline-none  font-medium text-sm  tracking-wider focus:outline-none  px-3 py-1 rounded-md hover:bg-opacity-95 bg-violet-400 bg-opacity-80 text-warmGray-100"
             }
           >
             OPEN
@@ -128,7 +128,7 @@ const JoinGroup = ({ onJoin }) => {
         type={"text"}
         ref={gRef}
         className={
-          "px-3 py-2 border-0 focus:ring-0 outline-none  rounded-none text-sm rounded-l-md bg-coolGray-700  border-collapse focus:border-b-2 focus:border-lightBlue-500"
+          "px-3 py-2 border-0 focus:ring-0 outline-none  rounded-none text-sm rounded-l-md bg-coolGray-700  border-collapse focus:border-b-2 focus:border-red-500"
         }
         placeholder={"Group ID"}
       />
@@ -136,7 +136,7 @@ const JoinGroup = ({ onJoin }) => {
         ref={keyRef}
         type={"text"}
         className={
-          "px-3 py-2  border-0 outline-none focus:ring-0 text-sm bg-coolGray-700 rounded-none w-20 border-collapse focus:border-b-2 focus:border-lightBlue-500  "
+          "px-3 py-2  border-0 outline-none focus:ring-0 text-sm bg-coolGray-700 rounded-none w-20 border-collapse focus:border-b-2 focus:border-red-500  "
         }
         placeholder={"KEY"}
       />
@@ -144,7 +144,7 @@ const JoinGroup = ({ onJoin }) => {
       <button
         onClick={hadleJoinClick}
         className={
-          "outline-none  font-medium text-sm  tracking-wider focus:outline-none w-16 px-3 py-2  rounded-r-md hover:bg-opacity-95 bg-lightBlue-500 bg-opacity-80 text-warmGray-100"
+          "outline-none  font-medium text-sm  tracking-wider focus:outline-none w-16 px-3 py-2  rounded-r-md hover:bg-opacity-95 bg-gradient-to-br from-red-500  to-violet-600 bg-opacity-80 text-warmGray-100"
         }
       >
         JOIN
