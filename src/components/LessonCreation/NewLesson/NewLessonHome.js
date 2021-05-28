@@ -3,13 +3,18 @@
  * Also list all temporary lessons.
  * Will publish them separately
  */
-import { PlusIcon } from "@heroicons/react/solid";
+import { PlusIcon, CheckCircleIcon } from "@heroicons/react/solid";
 import { useState, useEffect } from "react";
-import { MinusCircleIcon, UploadIcon } from "@heroicons/react/outline";
+import {
+  MinusCircleIcon,
+  UploadIcon,
+  ExclamationIcon,
+} from "@heroicons/react/outline";
 import { subjectnames } from "../../../utils/subjectlist";
 import CreateALesson from "./CreateALesson";
 import { useRef } from "react";
 import RAPI from "../../../API/RequestAPI";
+import LessonTimeline from "../LessonTimeline";
 
 /* var sD = {
   subname: "English",
@@ -115,19 +120,34 @@ export default function NewLessonHome({ gnameP, gnamelist }) {
     setShowCreateLesson(true);
   };
 
-  const handleSubjectPublish = async () => {
-    try {
-      await RAPI().put(`/lesson/${selectedGroupInfo._id}/publish`);
-    } catch (err) {
-      console.log(err);
-    }
+  const handleSubjectPublish = () => {
+    setUpdateInfo("Publishing...");
+
+    RAPI()
+      .put(`/lesson/${selectedGroupInfo._id}/publish`)
+      .then((res) => {
+        setUpdateInfo(
+          <span className={"inline-flex items-center"}>
+            Successfully Published{" "}
+            <CheckCircleIcon className={"ml-1.5 h-5 w-5"} />
+          </span>
+        );
+      })
+      .catch((err) =>
+        setUpdateInfo(
+          <span className={"inline-flex items-center"}>
+            Publish Faild
+            <ExclamationIcon className={"ml-1.5 h-5 w-5 text-yellow-400"} />
+          </span>
+        )
+      );
   };
   return (
     <div className={"flex flex-col relative min-h-screen mt-5  "}>
       <div>
         <div
           className={` ${
-            gname ? "hidden" : "absolute"
+            gname ? "hidden" : "fixed"
           } bg-coolGray-800 bg-opacity-90  flex justify-center items-center  top-0 right-0 bottom-0 left-0`}
         >
           <AskGnameModal
@@ -153,6 +173,9 @@ export default function NewLessonHome({ gnameP, gnamelist }) {
           <div className={"text-2xl "}>{selectedGroupInfo.group_name}</div>
         )}
         <NewLessonCreateButton />
+        <div>
+          <LessonTimeline />
+        </div>
         <div>
           <CPanel
             subjects={sBL}
