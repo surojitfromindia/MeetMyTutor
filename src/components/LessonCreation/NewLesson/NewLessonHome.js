@@ -3,28 +3,19 @@
  * Also list all temporary lessons.
  * Will publish them separately
  */
-import { PlusIcon, CheckCircleIcon } from "@heroicons/react/solid";
-import { useState, useEffect } from "react";
 import {
+  PlusIcon,
+  CheckCircleIcon,
   MinusCircleIcon,
-  UploadIcon,
-  ExclamationIcon,
-} from "@heroicons/react/outline";
+} from "@heroicons/react/solid";
+import { useState, useEffect } from "react";
+import { UploadIcon, ExclamationIcon } from "@heroicons/react/outline";
 import { subjectnames } from "../../../utils/subjectlist";
 import CreateALesson from "./CreateALesson";
 import { useRef } from "react";
 import RAPI from "../../../API/RequestAPI";
 import LessonTimeline from "../LessonTimeline";
-
-/* var sD = {
-  subname: "English",
-  topic: [
-    {
-      type: { typeText: "READ" },
-      des: "Read about sand storm from internet. It is an important topic. Just open a wikipedia page and read first few lines then open page 25 of your book.",
-    },
-  ],
-}; */
+import { Warning } from "../../CommonComponents/Suggestion";
 
 export default function NewLessonHome({ gnameP, gnamelist }) {
   const [sBL, setSBL] = useState([]);
@@ -41,7 +32,8 @@ export default function NewLessonHome({ gnameP, gnamelist }) {
   const [gname, setGname] = useState(gnameP);
   const [showsubjectNamModal, setshowSubjectNameModal] = useState(false);
   const [showCreateLesson, setShowCreateLesson] = useState(false);
-
+  const [showConfirmModa, setConfirmModal] = useState(false);
+  const [cModalChilds, setCModalChilds] = useState();
   const handleGroupNameSelect = (groupName) => {
     let selectedGroupInfo = gnamelist.filter(
       (group) => group.group_name === groupName
@@ -120,12 +112,12 @@ export default function NewLessonHome({ gnameP, gnamelist }) {
     setShowCreateLesson(true);
   };
 
-  const handleSubjectPublish = () => {
+  const handlePublishConfirm = () => {
+    setConfirmModal(false);
     setUpdateInfo("Publishing...");
-
     RAPI()
       .put(`/lesson/${selectedGroupInfo._id}/publish`)
-      .then((res) => {
+      .then((_) => {
         setUpdateInfo(
           <span className={"inline-flex items-center"}>
             Successfully Published{" "}
@@ -133,7 +125,7 @@ export default function NewLessonHome({ gnameP, gnamelist }) {
           </span>
         );
       })
-      .catch((err) =>
+      .catch((_) =>
         setUpdateInfo(
           <span className={"inline-flex items-center"}>
             Publish Faild
@@ -141,6 +133,11 @@ export default function NewLessonHome({ gnameP, gnamelist }) {
           </span>
         )
       );
+  };
+
+  const handleSubjectPublish = () => {
+    setConfirmModal(true);
+    setCModalChilds(<PublishConfirm handlePublishOK={handlePublishConfirm} />);
   };
   return (
     <div className={"flex flex-col relative min-h-screen mt-5  "}>
@@ -166,6 +163,18 @@ export default function NewLessonHome({ gnameP, gnamelist }) {
             }}
             onSelect={handleSubjectSelect}
           />
+        </div>
+        <div
+          onClick={(ev) => {
+            ev.preventDefault();
+            ev.stopPropagation();
+            setConfirmModal(false);
+          }}
+          className={`z-10 ${
+            showConfirmModa ? "fixed" : "hidden"
+          } bg-gray-900 bg-opacity-80  flex justify-center items-center top-0 right-0 bottom-0 left-0`}
+        >
+          <ConfirmationModal child={cModalChilds} />
         </div>
       </div>
       <div className={"flex flex-col space-y-3"}>
@@ -497,3 +506,28 @@ function getPreSubjects() {
   }
   return rA;
 }
+
+const ConfirmationModal = ({ child }) => {
+  return <div>{child}</div>;
+};
+
+const PublishConfirm = ({ handlePublishOK }) => {
+  return (
+    <div className={"px-5 rounded-md py-4 bg-coolGray-700 mx-10"}>
+      <Warning
+        warn={
+          "This will force these lesson to be published as a new lesson overriding the old lessons. Student's will recived the update as soon as they logged in."
+        }
+      />
+
+      <button
+        onClick={handlePublishOK}
+        className={
+          "outline-none ml-8 flex items-center gap-1  font-medium text-sm  tracking-wider focus:outline-none  px-2 py-1.5  rounded-md hover:bg-opacity-95 bg-coolGray-800  bg-opacity-80 text-warmGray-100"
+        }
+      >
+        PUBLISH
+      </button>
+    </div>
+  );
+};

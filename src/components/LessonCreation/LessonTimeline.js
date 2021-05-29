@@ -86,7 +86,9 @@ function CCirlcle({ ouC = "border-yellow-300", inC = "bg-yellow-300" }) {
     <div
       className={`border-2 ${ouC} w-4 h-4 rounded-full flex items-center justify-center`}
     >
-      <div className={`p-0.5 w-2 h-2 bg-white ${inC} rounded-full`}></div>
+      <div className={`p-0.5 w-2 h-2  ${inC} rounded-full`}></div>
     </div>
   );
 }
+
+
