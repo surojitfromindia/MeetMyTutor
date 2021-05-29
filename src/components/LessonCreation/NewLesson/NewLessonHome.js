@@ -15,7 +15,8 @@ import CreateALesson from "./CreateALesson";
 import { useRef } from "react";
 import RAPI from "../../../API/RequestAPI";
 import LessonTimeline from "../LessonTimeline";
-import { Warning } from "../../CommonComponents/Suggestion";
+import { Warning, Tips } from "../../CommonComponents/Suggestion";
+import Spinner from "../../CommonComponents/Spinner";
 
 export default function NewLessonHome({ gnameP, gnamelist }) {
   const [sBL, setSBL] = useState([]);
@@ -114,21 +115,25 @@ export default function NewLessonHome({ gnameP, gnamelist }) {
 
   const handlePublishConfirm = () => {
     setConfirmModal(false);
-    setUpdateInfo("Publishing...");
+    setUpdateInfo(
+      <span className={"inline-flex items-center space-x-1"}>
+        <span>Publishing</span> <Spinner size={20} color={"white"} />
+      </span>
+    );
     RAPI()
       .put(`/lesson/${selectedGroupInfo._id}/publish`)
       .then((_) => {
         setUpdateInfo(
-          <span className={"inline-flex items-center"}>
-            Successfully Published{" "}
-            <CheckCircleIcon className={"ml-1.5 h-5 w-5"} />
+          <span className={"inline-flex items-center space-x-1"}>
+            <span>Successfully Published</span>
+            <CheckCircleIcon className={"h-5 w-5"} />
           </span>
         );
       })
       .catch((_) =>
         setUpdateInfo(
-          <span className={"inline-flex items-center"}>
-            Publish Faild
+          <span className={"inline-flex items-center space-x-1"}>
+            <span>Publish Faild</span>
             <ExclamationIcon className={"ml-1.5 h-5 w-5 text-yellow-400"} />
           </span>
         )
@@ -308,6 +313,15 @@ function CPanel({
             PUBLISH
           </button>
         </div>
+        <div>
+          <Tips
+            bgc={"bg-emerald-700"}
+            tips={
+              "To finalize new created subject please confirm by pressing update button. To publish these lessons as new lesson click the publish button"
+            }
+          />
+        </div>
+
         <span
           className={
             "font-poppin text-gray-300 max-w-lg  text-xs tracking-wide"
