@@ -1,11 +1,9 @@
 import { FaLightbulb, FaExclamationTriangle } from "react-icons/fa";
 
-export default function Tips({ tips }) {
+export default function Tips({ tips, bgc = "bg-coolGray-700" }) {
   return (
     <div
-      className={
-        "px-3 py-4 rounded-md bg-coolGray-700 sm:max-w-lg flex flex-col  space-y-1"
-      }
+      className={`px-3 py-4 rounded-md ${bgc}  sm:max-w-lg flex flex-col  space-y-1`}
     >
       <div className={"flex  items-center"}>
         <div className={"w-6"}>
@@ -16,18 +14,18 @@ export default function Tips({ tips }) {
         </div>
       </div>
       <div className={"flex flex-col flex-shrin-0 pl-6 "}>
-        <div className={"font-robotoCondensed tracking-wide "}>{tips}</div>
+        <div className={"font-robotoCondensed text-sm tracking-wider leading-6  "}>
+          {tips}
+        </div>
       </div>
     </div>
   );
 }
 
-function Warning({ warn }) {
+function Warning({ warn, bgc = "bg-coolGray-700" }) {
   return (
     <div
-      className={
-        "px-3 py-4 rounded-md bg-coolGray-700 sm:max-w-lg flex flex-col  space-y-1"
-      }
+      className={`px-3 py-4 rounded-md ${bgc} sm:max-w-lg flex flex-col  space-y-1`}
     >
       <div className={"flex  items-center"}>
         <div className={"w-6"}>

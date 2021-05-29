@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import RAPI from "../API/RequestAPI";
 import PrgBar from "../components/CommonComponents/PrgBar";
 import AllNewStudy from "../components/StudyGroupCard.js/AllNewStudy";
+import Spinner from "../components/CommonComponents/Spinner";
 
 //A group
 export default function NewLesson({ groupIdProp }) {
@@ -10,6 +11,7 @@ export default function NewLesson({ groupIdProp }) {
   const [pV, setPv] = useState(0);
   const [max, setMax] = useState(100);
   const [groupInfo, setGroupInfo] = useState();
+  const [isLoaded, setIsLoaded] = useState(false);
 
   //pull new lesson
   //update check if prop is defined the fecth using that prop id
@@ -26,6 +28,7 @@ export default function NewLesson({ groupIdProp }) {
         `/lesson/${groupIdProp || groupId}?time=all`
       );
       setGroupInfo(data);
+      setIsLoaded(true);
     })();
   }, [groupId, groupIdProp]);
 
@@ -47,6 +50,13 @@ export default function NewLesson({ groupIdProp }) {
       }, 400);
     }
   }, [groupInfo]);
+
+  if (!isLoaded)
+    return (
+      <div className={"flex h-screen w-screen items-center justify-center"}>
+        <Spinner />
+      </div>
+    );
 
   return (
     <div className={"px-5 py-5 mt-3"}>

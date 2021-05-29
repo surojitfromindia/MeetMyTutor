@@ -7,13 +7,14 @@ import OldStudyCard from "../components/HomePageComponents/OldStudyCard";
 import UpcomigCard from "../components/HomePageComponents/UpcomigCard";
 import NewStudyCard from "../components/HomePageComponents/NewStudyCard";
 import JoinedGroupList from "../components/HomeComponents/JoinedGroupList";
+import Spinner from "../components/CommonComponents/Spinner";
 
 export default function AllLesson({ groupInformation }) {
   const { groupId } = useParams();
   const [authorised, setAuthorised] = useState(true);
   const [groupInfo, setGroupInfo] = useState();
   const [groupInfoFromStudyGroup, setgroupInfoFromStudyGroup] = useState();
-
+  const [isLoaded, setIsLoaded] = useState(false);
   //pull new lesson
   useEffect(() => {
     (async () => {
@@ -22,6 +23,7 @@ export default function AllLesson({ groupInformation }) {
       } catch (err) {
         setAuthorised(false);
       }
+      setIsLoaded(true);
     })();
   }, [groupId]);
 
@@ -42,6 +44,13 @@ export default function AllLesson({ groupInformation }) {
       })();
   }, [groupId, authorised]);
 
+  if (!isLoaded)
+    return (
+      <div className={"flex h-screen w-screen items-center justify-center"}>
+        <Spinner />
+      </div>
+    );
+
   return authorised ? (
     <div
       className={
@@ -56,11 +65,7 @@ export default function AllLesson({ groupInformation }) {
         <div> {<JoinedGroupList glist={groupInformation} />}</div>
       </div>
 
-      <div
-        className={
-          "overflow-y-auto scrollbar"
-        }
-      >
+      <div className={"overflow-y-auto scrollbar"}>
         {groupInfoFromStudyGroup && (
           <Greet
             heading="Hey, Ready to Roll !"
