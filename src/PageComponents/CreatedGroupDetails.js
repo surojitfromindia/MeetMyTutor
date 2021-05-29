@@ -13,6 +13,7 @@ import {
   useHistory,
 } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { Tips, Warning } from "../components/CommonComponents/Suggestion";
 import RAPI from "../API/RequestAPI";
 
 export default function CreatedGroupDetails({
@@ -48,6 +49,8 @@ export default function CreatedGroupDetails({
         setListOfStudentInfo([...tsinfolist]);
       });
   }, [studenIds, ginfo]);
+
+  
 
   const handleDeleteGroup = () => {
     onDelete(ginfo.group_name);
@@ -144,7 +147,9 @@ export default function CreatedGroupDetails({
                   <Route
                     exact
                     path={`${path}/settings`}
-                    render={() => <Settings onDelete={handleDeleteGroup} />}
+                    render={() => (
+                      <Settings onDelete={handleDeleteGroup} ginfo={ginfo} />
+                    )}
                   />
                   <Route
                     path={`${path}/`}
@@ -154,6 +159,8 @@ export default function CreatedGroupDetails({
               </div>
             </div>
           </div>
+
+         
         </div>
       ) : (
         <div
@@ -187,15 +194,25 @@ function Teachers({ teacherIds, onTeacheUpdated }) {
 }
 
 //all kind of admin functions goes here
-function Settings({ onDelete }) {
+function Settings({ onDelete, ginfo }) {
   return (
     <div className={"flex flex-col w-full"}>
       <span className={"text-lg font-poppin px-5"}>Settings</span>
       <div className={"w-full divide-y divide-gray-500"}>
-        <div className={"flex flex-col  justify-between py-2 px-5 space-y-1 "}>
+        <div className={"flex flex-col  justify-between py-2 px-5 space-y-2 "}>
           <span className={"text-sm font-robotoCondensed"}>
             Change Group Name.
           </span>
+          <div>
+            <input
+              type={"text"}
+              defaultValue={ginfo.group_name}
+              className={
+                "px-2 py-2 w-full flex-shrink  border-0  focus:ring-0 outline-none   text-sm rounded-md bg-coolGray-800  border-collapse focus:border-b-2 focus:border-lightBlue-500"
+              }
+              placeholder={"User ID"}
+            />
+          </div>
           <button
             className={
               "outline-none w-20 font-medium text-sm  tracking-wider focus:outline-none  px-3 py-1.5  rounded-md hover:bg-opacity-95 bg-red-500 bg-opacity-80 text-warmGray-100"
@@ -208,7 +225,14 @@ function Settings({ onDelete }) {
           className={"flex flex-col  justify-between py-1.5 px-5 space-y-1 "}
         >
           <span className={"text-sm font-robotoCondensed"}>
-            Delete This Group. Caution this operation is not reversable.
+            Delete This Group
+            <div className={"-ml-3"}>
+              <Warning
+                warn={
+                  "Deleting this group will remove every lessons, exam details as well as clear every records. Student will no longer recive updates. We strongly suggest to create a Lesson backup before deleting this group"
+                }
+              />
+            </div>
           </span>
           <button
             onClick={onDelete}
@@ -252,11 +276,14 @@ function LessonAction({ gname }) {
         <div className={"flex flex-col  justify-between space-y-3 "}>
           <span
             className={
-              "w-3/4 font-robotoCondensed text-sm text-gray-300 tracking-wide"
+              "w-3/4 font-robotoCondensed text-sm text-gray-300 tracking-wide -ml-3 -mt-3"
             }
           >
-            Create a newlesson for your students. They will recive the update
-            while the lesson is finalised and pushed
+            <Tips
+              tips={
+                " Create a new lesson for your students. They will recive the update when the lesson is finalised and uploaded"
+              }
+            />
           </span>
           <Link className={"w-max"} to={`/lesson/create/${gname}`}>
             <button

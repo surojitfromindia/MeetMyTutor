@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import moment from "moment";
 import { BellIcon } from "@heroicons/react/solid";
 import { Link } from "react-router-dom";
+import { Tips } from "../CommonComponents/Suggestion";
 
 //list all group card
 export default function JoinedGroupList({ glist, onJoin }) {
@@ -13,7 +14,7 @@ export default function JoinedGroupList({ glist, onJoin }) {
 
   return (
     <div className={"w-full flex flex-col space-y-6 0"}>
-      <div className={"flex flex-col space-y-2"}>
+      <div className={"flex flex-col space-y-4"}>
         <span className={"font-robotoCondensed text-4xl tracking-wider"}>
           Joined
         </span>
@@ -23,6 +24,13 @@ export default function JoinedGroupList({ glist, onJoin }) {
           }
         >
           <JoinGroup onJoin={onJoin} />
+        </div>
+        <div>
+          <Tips
+            tips={
+              "Welcome. Din't joined a group yet ? Ask a 'group id' from your teacher with secrate key. Add those in the input field above and click Join"
+            }
+          />
         </div>
       </div>
 
