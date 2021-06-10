@@ -35,6 +35,7 @@ export default function NewLessonHome({ gnameP, gnamelist }) {
   const [showCreateLesson, setShowCreateLesson] = useState(false);
   const [showConfirmModa, setConfirmModal] = useState(false);
   const [cModalChilds, setCModalChilds] = useState();
+  const [isSubjectUpdate, setisSubjectUpdate] = useState(false);
   const handleGroupNameSelect = (groupName) => {
     let selectedGroupInfo = gnamelist.filter(
       (group) => group.group_name === groupName
@@ -84,7 +85,8 @@ export default function NewLessonHome({ gnameP, gnamelist }) {
     setSBL([...tempA]);
   };
 
-  const handleASubjectUpdate = (updateSubjectLesson) => {
+  const handleASubjectUpdate = async (updateSubjectLesson) => {
+    setisSubjectUpdate(true);
     //get the index
     let b = sBL.findIndex(
       ({ subName }) => subName === updateSubjectLesson.subName
@@ -92,10 +94,10 @@ export default function NewLessonHome({ gnameP, gnamelist }) {
     let sbLTemp = sBL;
     sbLTemp[b] = updateSubjectLesson;
     setSBL([...sbLTemp]);
-    RAPI()
-      .post(`/lesson/${selectedGroupInfo._id}/temp`, sBL)
-      .then((res) => console.log(res.data))
-      .catch((err) => {});
+    try {
+      await RAPI().post(`/lesson/${selectedGroupInfo._id}/temp`, sBL);
+      setisSubjectUpdate(false);
+    } catch (err) {}
   };
 
   const handleFinalize = () => {
@@ -211,6 +213,7 @@ export default function NewLessonHome({ gnameP, gnamelist }) {
             setShowCreateLesson(false);
             setCreatedLessonPreInfo(undefined);
           }}
+          ustatus={isSubjectUpdate}
           lessonDetails={createdLessonPreInfo}
         />
       )}
@@ -296,8 +299,11 @@ function CPanel({
 }) {
   return (
     <div className={"overflow-y-auto"}>
+      <div className={" rounded-t-md  flex-col gap-3 bg-emerald-700 py-2 "}>
+        <span className={"px-3 "}>{updateMessage}</span>
+      </div>
       <div
-        className={"rounded-t-md flex flex-col gap-3 bg-emerald-800 px-3 py-4"}
+        className={"rounded-b-md flex flex-col gap-3 bg-emerald-800 px-3 py-4"}
       >
         <div className={"flex flex-row justify-between"}>
           <span className={"font-poppin text-lg tracking-wide"}>
@@ -331,7 +337,7 @@ function CPanel({
           created subjects by clicking edit on corrosponding subjects.
         </span>
         <div className={"flex flex-col space-y-2 mt-2"}>
-          <div className={""}>
+          <div className={"max-h-[25em] scrollbar overflow-y-auto"}>
             {subjects && (
               <div className={"flex flex-col gap-2 md:flex-row md:flex-wrap"}>
                 {subjects.map((s) => (
@@ -368,9 +374,6 @@ function CPanel({
             </button>
           </div>
         </div>
-      </div>
-      <div className={" rounded-b-md  flex-col gap-3 bg-emerald-700 py-2 "}>
-        <span className={"px-3 "}>{updateMessage}</span>
       </div>
     </div>
   );
@@ -419,11 +422,11 @@ function SubjectCard({ tempSubjectDetails, onRemove, onOpen }) {
         </div>
         <div className={"flex flex-col space-y"}>
           <span className={"text-gray-200 tracking-wide"}>QUIZ(S)</span>
-          <span className={"text-gray-300 font-poppin text-sm"}> 20 </span>
+          <span className={"text-gray-300 font-poppin text-sm"}> 0 </span>
         </div>
         <div className={"flex flex-col space-y"}>
           <span className={"text-gray-200 tracking-wide"}>EXPL(S)</span>
-          <span className={"text-gray-300 font-poppin text-sm"}> 4 </span>
+          <span className={"text-gray-300 font-poppin text-sm"}> 0 </span>
         </div>
       </div>
       <div className={"flex flex-row gap-2 flex-wrap text-sm"}>

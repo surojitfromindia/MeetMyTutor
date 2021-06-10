@@ -12,7 +12,7 @@ export default function MoreDeatilsOnSubject({
   return (
     <div
       id={subjectData?.subjectName}
-      className={`flex flex-col justify-between  px-5 py-3 rounded-md bg-gradient-to-tr  ${
+      className={`flex flex-col justify-between   px-5 py-2.5 rounded-md bg-gradient-to-tr  ${
         isAllDone ? doneG : backG
       }`}
     >
@@ -39,7 +39,7 @@ export default function MoreDeatilsOnSubject({
         <div className={"block leading-4 text-sm   text-red-200 "}>
           <ul
             className={
-              "scrollbar flex flex-col list-none max-h-28 overflow-y-auto space-y-2  "
+              "scrollbar flex flex-col list-none max-h-[7.1rem] overflow-y-auto space-y-2  "
             }
           >
             {subjectData.topic.map(({ type, des }, idx) => (
@@ -66,11 +66,19 @@ export default function MoreDeatilsOnSubject({
       </div>
 
       <div className={"flex flex-col justify-start"}>
-        <div className={"block leading-5 text-sm mb-1.5 mt-3"}>
-          <span className={"text-xl  text-coolGray-200 font-medium"}>
-            {subjectData.topic.length}
-          </span>
-          <span className={"text-sm text-coolGray-200 ml-1"}>excersise</span>
+        <div className={"flex gap-4"}>
+          <div className={"block leading-5 text-sm mb-1.5 mt-3"}>
+            <span className={"text-xl  text-coolGray-200 font-medium"}>
+              {subjectData.topic.length}
+            </span>
+            <span className={"text-sm text-coolGray-200 ml-1"}>excersise</span>
+          </div>
+          <div className={"block leading-5 text-sm mb-1.5 mt-3"}>
+            <span className={"text-xl  text-coolGray-200 font-medium"}>
+              {subjectData.question.length}
+            </span>
+            <span className={"text-sm text-coolGray-200 ml-1"}>questions</span>
+          </div>
         </div>
         <button
           className={
