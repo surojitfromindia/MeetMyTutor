@@ -5,26 +5,40 @@ import {
   SaveIcon,
   PlusSmIcon,
 } from "@heroicons/react/outline";
+import Spinner from "../../CommonComponents/Spinner";
+import { Warning } from "../../CommonComponents/Suggestion";
 
 export default function CreateALesson({
   lessonDetails,
   onclose,
   show = true,
   onSave,
+  ustatus,
 }) {
   const [topics, setTopics] = useState(lessonDetails.topic);
+  const [questions, setQuestions] = useState(lessonDetails.question);
   const [tabIndex, setTabIndex] = useState(0);
   const [currentOpenTab, setCurrentOpenTab] = useState();
+
   useEffect(() => {
     switch (tabIndex) {
-      case 0:
+      case 2:
         setCurrentOpenTab(<div>Quiz</div>);
         break;
-      case 2:
-        console.log(topics);
+      case 0:
+        setCurrentOpenTab(
+          <QuestionTab
+            preQue={questions}
+            onQueUpdate={(g) => {
+              setQuestions([...g]);
+            }}
+          />
+        );
+        break;
+      case 1:
         setCurrentOpenTab(
           <TopicTab
-            preTopic={lessonDetails.topic}
+            preTopic={topics}
             onTopicUpdate={(g) => {
               setTopics([...g]);
             }}
@@ -34,9 +48,9 @@ export default function CreateALesson({
       default:
         setCurrentOpenTab(<div>Quiz</div>);
     }
-  }, [tabIndex, lessonDetails, topics]);
+  }, [tabIndex, lessonDetails, topics, questions]);
 
-  const tabs = ["Quiz", "Questions", "Topic", "Note"];
+  const tabs = ["Questions", "Topic", "Quiz", "Note"];
   const handleTabItemChanged = (index) => {
     setTabIndex(index);
   };
@@ -45,7 +59,10 @@ export default function CreateALesson({
     let updatedLessonDetails = lessonDetails;
     //fillter out non-emptytopics
     let nonEmptyTopics = topics.filter(({ des }) => des !== "");
+    let nonEmptyQuestions = questions.filter(({ qtext }) => qtext !== "");
+
     updatedLessonDetails.topic = nonEmptyTopics;
+    updatedLessonDetails.question = nonEmptyQuestions;
     onSave(updatedLessonDetails);
   };
   return (
@@ -60,7 +77,7 @@ export default function CreateALesson({
         } bg-coolGray-700 flex flex-col justify-between   shadow-xl overflow-y-auto inset-y-10 inset-x-6  lg:inset-20 rounded-md`}
       >
         <div className={"overflow-y-auto scrollbar"}>
-          <div className={"sticky top-0 bg-coolGray-700 px-3 py-3 "}>
+          <div className={"sticky top-0 bg-coolGray-700 px-3 pt-3 "}>
             <div className={"flex  items-center gap-5"}>
               <button
                 onClick={(ev) => {
@@ -78,24 +95,43 @@ export default function CreateALesson({
               </div>
             </div>
 
-            <div></div>
-            <div className={"mt-4 "}>
+            <div className={"text-sm"}>
+              <Warning warn="Changing Tabs without saving  will remove unsaved works." />
+            </div>
+            <div>
               <Tab children={tabs} onTabItemChanged={handleTabItemChanged} />
             </div>
-            <div className={"mt-1 border-t-2 w-full bg-white"}></div>
           </div>
           <div className={"px-3 pb-3"}>{currentOpenTab && currentOpenTab}</div>
         </div>
 
-        <button
-          onClick={handleMegaSave}
-          className={
-            "outline-none flex-shrink-0 flex flex-row gap-1 items-center h-10   font-medium text-sm  tracking-wider focus:outline-none  px-2.5   rounded-sm hover:bg-opacity-95 bg-teal-500 bg-opacity-80 text-warmGray-100"
-          }
-        >
-          <SaveIcon className={"w-4 h-4"} />
-          SAVE
-        </button>
+        <div className={"flex flex-col"}>
+          <div className={"flex  transition-all ease-in-out  max-h-16 "}></div>
+          <button
+            className={
+              "outline-none flex-shrink-0 flex flex-row items-center  font-medium text-sm  tracking-wider focus:outline-none    rounded-sm hover:bg-opacity-95 bg-teal-500 bg-opacity-80 text-warmGray-100"
+            }
+          >
+            {!ustatus ? (
+              <div
+                onClick={handleMegaSave}
+                className={"flex gap-1 items-center w-full h-10 px-2.5"}
+              >
+                <SaveIcon className={"w-4 h-4"} />
+                SAVE
+              </div>
+            ) : (
+              <div
+                className={
+                  "flex h-10  items-center justify-start gap-1 px-2.5 "
+                }
+              >
+                <Spinner size={20} color={"white"} />
+                <div className={"tracking-widest"}>Saving...</div>
+              </div>
+            )}
+          </button>
+        </div>
       </div>{" "}
     </div>
   );
@@ -122,7 +158,7 @@ function Tab({
               handleTabChange(index);
             }}
             className={`cursor-pointer hover:underline ${
-              index === current ? "text-orange-400" : "text-gray-300"
+              index === current ? "text-emerald-300" : "text-gray-300"
             }`}
           >
             {tabItem}
@@ -188,7 +224,7 @@ function TopicCard({ topic, onSave }) {
     <div
       className={`flex flex-col  ${
         editMode ? "gap-2 " : "gap-0"
-      }   md:flex-row w-full bg-coolGray-800 px-3 py-2 rounded-md`}
+      }   md:flex-row w-full bg-coolGray-800 px-3 py-2 rounded-md text-sm uppercase`}
     >
       <div className={"flex  md:w-1/6 "}>
         {editMode ? (
@@ -229,7 +265,7 @@ function TopicCard({ topic, onSave }) {
               setEditMode(!editMode);
             }}
             className={
-              "outline-none flex flex-row gap-1 items-center py-1.5 w-20  font-medium text-sm  tracking-wider focus:outline-none  px-2.5   rounded-sm hover:bg-opacity-95 bg-lightBlue-500 bg-opacity-80 text-warmGray-100"
+              "outline-none flex flex-row gap-1 items-center py-1.5 md:h-10 w-20  font-medium text-sm  tracking-wider focus:outline-none  px-2.5   rounded-sm hover:bg-opacity-95 bg-lightBlue-500 bg-opacity-80 text-warmGray-100"
             }
           >
             <PencilIcon className={"w-4 h-4"} />
@@ -244,7 +280,155 @@ function TopicCard({ topic, onSave }) {
               }
             }}
             className={
-              "outline-none flex flex-row gap-1 items-center h-10  w-20  font-medium text-sm  tracking-wider focus:outline-none  px-2.5   rounded-sm hover:bg-opacity-95 bg-teal-500 bg-opacity-80 text-warmGray-100"
+              "outline-none flex flex-row gap-1 items-center py-1.5 md:h-10  w-20  font-medium text-sm  tracking-wider focus:outline-none  px-2.5   rounded-sm hover:bg-opacity-95 bg-teal-500 bg-opacity-80 text-warmGray-100"
+            }
+          >
+            <SaveIcon className={"w-4 h-4"} />
+            SAVE
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function QuestionTab({ preQue, onQueUpdate }) {
+  const [preQues, setPreQues] = useState(preQue);
+  const handleAdd = () => {
+    let blankQue = {
+      type: { typeText: "" },
+      qtext: "",
+    };
+    setPreQues([...preQues, blankQue]);
+    // onQueUpdate(preQues);
+  };
+  const hadleSaveAndUpdate = (index, ttype, tqn, tan) => {
+    let tempT = preQues;
+    tempT[index] = {
+      type: { typeText: ttype },
+      qtext: tqn,
+      ans: tan,
+    };
+    setPreQues([...tempT]);
+    onQueUpdate(preQues);
+  };
+  return (
+    <div className={"mt-4 flex flex-col gap-2  "}>
+      {preQues && (
+        <div className={"flex flex-col gap-2"}>
+          {preQues.map((q, index) => (
+            <QuestionCard
+              key={index}
+              Qn={q}
+              onSave={(ttype, tqn, tan) =>
+                hadleSaveAndUpdate(index, ttype, tqn, tan)
+              }
+            />
+          ))}{" "}
+        </div>
+      )}
+      <div className={"flex justify-center  md:justify-end   md:mr-3 "}>
+        <button
+          onClick={handleAdd}
+          className={
+            "outline-none flex flex-row gap-1 items-center py-1.5 w-20    font-medium text-sm  tracking-wider focus:outline-none  px-2.5   rounded-sm hover:bg-opacity-95 bg-red-500 bg-opacity-80 text-warmGray-100"
+          }
+        >
+          <PlusSmIcon className={"w-4 h-4"} />
+          ADD
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function QuestionCard({ Qn, onSave }) {
+  const [editMode, setEditMode] = useState(Qn?.qtext ? false : true);
+  const typeRef = useRef();
+  const qtxRef = useRef();
+  const aRef = useRef();
+  return (
+    <div
+      className={`flex flex-col  ${
+        editMode ? "gap-2 " : "gap-0"
+      }   md:flex-row w-full bg-coolGray-800 px-3 py-2 rounded-md text-sm uppercase`}
+    >
+      <div className={"flex  md:w-1/6 "}>
+        {editMode ? (
+          <input
+            ref={typeRef}
+            type="text"
+            placeholder={"Type"}
+            disabled={!editMode}
+            defaultValue={Qn?.type?.typeText.toUpperCase()}
+            className={`uppercase rounded-sm border focus:outline-none bg-coolGray-800 px-2 py-1.5  w-full`}
+          />
+        ) : (
+          <div className={`bg-transparent  mt-1.5 mb-1.5   w-full`}>
+            {Qn?.type?.typeText.toUpperCase()}
+          </div>
+        )}
+      </div>
+
+      <div className={"flex md:w-full "}>
+        {editMode ? (
+          <input
+            ref={qtxRef}
+            type="text"
+            placeholder={"Description"}
+            disabled={!editMode}
+            defaultValue={Qn?.qtext}
+            className={`rounded-sm border focus:outline-none bg-coolGray-800 m-0 px-2 py-1.5   w-full`}
+          />
+        ) : (
+          <div className={`bg-transparent mt-1 mb-1.5   w-full `}>
+            {Qn?.qtext}
+          </div>
+        )}
+      </div>
+      <div className={"flex  md:w-full"}>
+        {editMode ? (
+          <input
+            ref={aRef}
+            type="text"
+            placeholder={"Ans"}
+            disabled={!editMode}
+            defaultValue={Qn?.ans}
+            className={`rounded-sm border focus:outline-none bg-coolGray-800 px-2 py-1.5  w-full`}
+          />
+        ) : (
+          <div className={`bg-transparent  mt-1.5 mb-1.5   w-full`}>
+            {Qn?.ans}
+          </div>
+        )}
+      </div>
+      <div className={`${!editMode ? "mt-2" : ""} md:mt-0`}>
+        {!editMode ? (
+          <button
+            onClick={() => {
+              setEditMode(!editMode);
+            }}
+            className={
+              "outline-none flex flex-row gap-1 items-center py-1.5 md:h-10  w-20  font-medium text-sm  tracking-wider focus:outline-none  px-2.5   rounded-sm hover:bg-opacity-95 bg-rose-500 bg-opacity-80 text-warmGray-100"
+            }
+          >
+            <PencilIcon className={"w-4 h-4"} />
+            EDIT
+          </button>
+        ) : (
+          <button
+            onClick={() => {
+              if (typeRef.current.value !== "" && qtxRef.current.value !== "") {
+                setEditMode(!editMode);
+                onSave(
+                  typeRef.current.value,
+                  qtxRef.current.value,
+                  aRef.current.value
+                );
+              }
+            }}
+            className={
+              "outline-none flex flex-row gap-1 items-center py-1.5 md:h-10  w-20  font-medium text-sm  tracking-wider focus:outline-none  px-2.5   rounded-sm hover:bg-opacity-95 bg-teal-500 bg-opacity-80 text-warmGray-100"
             }
           >
             <SaveIcon className={"w-4 h-4"} />

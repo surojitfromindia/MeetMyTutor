@@ -1,6 +1,3 @@
-/**
- * List Everything about this group
- */
 import { TeacherList } from "./CreateNewGroup";
 import CreatedGroupList from "../components/HomeComponents/CreatedGroupList";
 import {
@@ -15,6 +12,7 @@ import {
 import { useEffect, useState } from "react";
 import { Tips, Warning } from "../components/CommonComponents/Suggestion";
 import RAPI from "../API/RequestAPI";
+import Spinner from "../components/CommonComponents/Spinner";
 
 export default function CreatedGroupDetails({
   onDelete,
@@ -42,15 +40,14 @@ export default function CreatedGroupDetails({
   //get Non-hidden student infos using studeIds
   useEffect(() => {
     let tsinfolist = [];
-    if (studenIds)
+    if (studenIds) {
       studenIds.forEach(async (sId) => {
         let { data } = await RAPI().get(`/user/${ginfo._id}/${sId}`);
         tsinfolist.push(data);
         setListOfStudentInfo([...tsinfolist]);
       });
+    }
   }, [studenIds, ginfo]);
-
-  
 
   const handleDeleteGroup = () => {
     onDelete(ginfo.group_name);
@@ -159,8 +156,6 @@ export default function CreatedGroupDetails({
               </div>
             </div>
           </div>
-
-         
         </div>
       ) : (
         <div
@@ -177,9 +172,16 @@ export default function CreatedGroupDetails({
 
 function Information({ studentlist, gname }) {
   return (
-    <div className={"w-full divide-y divide-gray-500 "}>
-      <StudentList studentlist={studentlist} />
+    <div className={"w-full flex flex-col divide-y divide-gray-500 "}>
       <LessonAction gname={gname} />
+      {!studentlist ? (
+        <div className={"flex flex-col items-center p-5 "}>
+          <Spinner />
+          <div>Loading Students..</div>
+        </div>
+      ) : (
+        <StudentList studentlist={studentlist} />
+      )}
     </div>
   );
 }
