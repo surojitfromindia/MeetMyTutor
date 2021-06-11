@@ -3,7 +3,7 @@ import moment from "moment";
 import { BellIcon } from "@heroicons/react/solid";
 import { Link } from "react-router-dom";
 import { Tips } from "../CommonComponents/Suggestion";
-
+import Spinner from "../../components/CommonComponents/Spinner";
 //list all group card
 export default function JoinedGroupList({ glist, onJoin }) {
   const [groupList, setGroupList] = useState(glist);
@@ -33,17 +33,25 @@ export default function JoinedGroupList({ glist, onJoin }) {
           />
         </div>
       </div>
-
-      <div
-        className={
-          "w-full flex flex-col space-y-4 sm:space-y-0 sm:gap-2 sm:flex-row sm:flex-wrap "
-        }
-      >
-        {groupList.length !== 0 &&
-          groupList.map((group, index) => (
-            <GroupCard ginfo={group} key={index} />
-          ))}
-      </div>
+      {groupList ? (
+        <div
+          className={
+            "w-full flex flex-col space-y-4 sm:space-y-0 sm:gap-2 sm:flex-row sm:flex-wrap "
+          }
+        >
+          {groupList.length !== 0 &&
+            groupList.map((group, index) => (
+              <GroupCard ginfo={group} key={index} />
+            ))}
+        </div>
+      ) : (
+        <div className={"py-3 px-5  flex -ml-4  "}>
+          <div className={"flex space-x-2   items-center   "}>
+            <Spinner />
+            <div className={"flex-shrink-0"}>Loading Study Groups ... </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

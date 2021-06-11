@@ -4,7 +4,7 @@
 
 @layer utilities {
   .scrollbar {
-    scrollbar-color: red white;
+    scrollbar-color: rgba(200, 200, 200, 0.4) rgba(200, 200, 200, 0.4);
     scrollbar-width: thin;
   }
   .scrollbar::-webkit-scrollbar-track {
