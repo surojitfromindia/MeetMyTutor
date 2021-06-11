@@ -4,7 +4,6 @@ import RAPI from "../API/RequestAPI";
 
 import Greet from "../components/CommonComponents/Greet";
 import OldStudyCard from "../components/HomePageComponents/OldStudyCard";
-import UpcomigCard from "../components/HomePageComponents/UpcomigCard";
 import NewStudyCard from "../components/HomePageComponents/NewStudyCard";
 import JoinedGroupList from "../components/HomeComponents/JoinedGroupList";
 import Spinner from "../components/CommonComponents/Spinner";

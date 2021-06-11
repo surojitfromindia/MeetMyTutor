@@ -1,7 +1,7 @@
 import moment from "moment";
 import { BellIcon } from "@heroicons/react/solid";
 import { Link } from "react-router-dom";
-
+import Spinner from "../../components/CommonComponents/Spinner";
 export default function CreatedGroupList({ cglist, onCGCOpenClick }) {
   return (
     <div className={"w-full flex flex-col space-y-6 "}>
@@ -9,20 +9,29 @@ export default function CreatedGroupList({ cglist, onCGCOpenClick }) {
         <span className={"font-robotoCondensed text-4xl  tracking-wider"}>
           Created
         </span>
-        <div
-          className={
-            "w-full flex flex-col space-y-4 sm:space-y-0 sm:gap-2 sm:flex-row sm:flex-wrap"
-          }
-        >
-          {cglist.length !== 0 &&
-            cglist.map((group, index) => (
-              <GroupCard
-                cginfo={group}
-                key={index}
-                onOpenClick={onCGCOpenClick}
-              />
-            ))}
-        </div>
+        {cglist ? (
+          <div
+            className={
+              "w-full flex flex-col space-y-4 sm:space-y-0 sm:gap-2 sm:flex-row sm:flex-wrap"
+            }
+          >
+            {cglist.length !== 0 &&
+              cglist.map((group, index) => (
+                <GroupCard
+                  cginfo={group}
+                  key={index}
+                  onOpenClick={onCGCOpenClick}
+                />
+              ))}
+          </div>
+        ) : (
+          <div className={"py-3 px-5  flex -ml-4  "}>
+            <div className={"flex space-x-2   items-center   "}>
+              <Spinner />
+              <div className={"flex-shrink-0"}>Loading Created Groups ... </div>
+            </div>
+          </div>
+        )}
 
         <CreateGroupButton />
       </div>

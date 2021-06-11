@@ -25,8 +25,8 @@ export default function Dashboard() {
   const [createdGroupids, setCreatedGroupids] = useState([]);
   const [, setsHidden] = useState();
   const [NonHidden, setsNonHidden] = useState();
-  const [groupInformations, setGroupInformation] = useState([]);
-  const [createdGroupInfomation, setCreatedGroupInformation] = useState([]);
+  const [groupInformations, setGroupInformation] = useState();
+  const [createdGroupInfomation, setCreatedGroupInformation] = useState();
   const [createdGrop, setCreatedGroup] = useState();
   const handleshowNav = () => {
     setShowNav(!showNav);
@@ -59,6 +59,8 @@ export default function Dashboard() {
         TempList.push(data);
         setGroupInformation([...TempList]);
       });
+    } else {
+      setGroupInformation([]);
     }
   }, [groupids]);
 
@@ -76,6 +78,8 @@ export default function Dashboard() {
           console.log({ err });
         }
       });
+    } else {
+      setCreatedGroupInformation([]);
     }
   }, [createdGroupids]);
 
