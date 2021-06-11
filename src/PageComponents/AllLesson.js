@@ -46,8 +46,11 @@ export default function AllLesson({ groupInformation }) {
 
   if (!isLoaded)
     return (
-      <div className={"flex h-screen w-screen items-center justify-center"}>
-        <Spinner />
+      <div className={"py-3 px-5  flex justify-center items-center"}>
+        <div className={"flex space-x-2 items-center justify-center h-screen"}>
+          <Spinner />
+          <div>Loading...</div>
+        </div>
       </div>
     );
 
@@ -81,12 +84,12 @@ export default function AllLesson({ groupInformation }) {
               lesson={groupInfo.NewLesson.allSubjects}
             />
           )}
-          {groupInfo?.NewLesson && (
+          {/*groupInfo?.NewLesson && (
             <UpcomigCard
               gid={groupId}
               lesson={groupInfo.NewLesson.allSubjects}
             />
-          )}
+          )*/}
           {groupInfo && <OldStudyCard />}
         </div>
       </div>

@@ -12,15 +12,13 @@ export default function OldStudyCard() {
           PRIVIOUS
         </span>
         <span className={"block leading-4 text-sm   text-lightBlue-200 "}>
-          view upcoming lessions in advance. topics will be coverd in next
-          classes
+          Re-learn old excersises. You excersises will remain as long as you are
+          registerd with this study group.
         </span>
 
         <div className={"block leading-5 text-sm mb-4 mt-1.5"}>
-          <span className={"text-xl  text-coolGray-200 font-medium"}>5</span>
-          <span className={"text-sm text-coolGray-200 ml-1"}>
-            new excersise
-          </span>
+          <span className={"text-xl  text-coolGray-200 font-medium"}>15</span>
+          <span className={"text-sm text-coolGray-200 ml-1"}>excersises</span>
         </div>
       </div>
       <div className={"flex justify-start"}>
