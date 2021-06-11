@@ -6,7 +6,7 @@ import {
   PlusSmIcon,
 } from "@heroicons/react/outline";
 import Spinner from "../../CommonComponents/Spinner";
-import { Warning } from "../../CommonComponents/Suggestion";
+import { FaChevronDown as Fdw, FaChevronUp as Fdu } from "react-icons/fa";
 
 export default function CreateALesson({
   lessonDetails,
@@ -19,7 +19,6 @@ export default function CreateALesson({
   const [questions, setQuestions] = useState(lessonDetails.question);
   const [tabIndex, setTabIndex] = useState(0);
   const [currentOpenTab, setCurrentOpenTab] = useState();
-
   useEffect(() => {
     switch (tabIndex) {
       case 2:
@@ -50,7 +49,7 @@ export default function CreateALesson({
     }
   }, [tabIndex, lessonDetails, topics, questions]);
 
-  const tabs = ["Questions", "Topic", "Quiz", "Note"];
+  const tabs = ["Questions", "Topics", "Quizs", "Notes"];
   const handleTabItemChanged = (index) => {
     setTabIndex(index);
   };
@@ -74,30 +73,29 @@ export default function CreateALesson({
       <div
         className={`${
           show ? "fixed" : "hidden"
-        } bg-coolGray-700 flex flex-col justify-between   shadow-xl overflow-y-auto inset-y-10 inset-x-6  lg:inset-20 rounded-md`}
+        } bg-coolGray-700 flex flex-col justify-between   shadow-xl overflow-y-auto bottom-5 top-5 inset-x-2   lg:inset-20 rounded-md`}
       >
         <div className={"overflow-y-auto scrollbar"}>
           <div className={"sticky top-0 bg-coolGray-700 px-3 pt-3 "}>
-            <div className={"flex  items-center gap-5"}>
-              <button
-                onClick={(ev) => {
-                  onclose();
-                }}
-                className={
-                  "bg-coolGray-600 px-3 py-2 focus:outline-none focus:shadow-2xl hover:shadow-2xl hover:bg-coolGray-500 focus:bg-coolGray-500 "
-                }
-              >
-                <MCI className={"h-5 w-5"} />
-              </button>
+            <div className={"flex justify-between"}>
+              <div className={"flex  items-center gap-2 mb-3"}>
+                <button
+                  onClick={(ev) => {
+                    onclose();
+                  }}
+                  className={
+                    "bg-coolGray-800 rounded-full px-2 py-2 focus:outline-none focus:shadow-2xl hover:shadow-2xl hover:bg-coolGray-500 focus:bg-coolGray-500 "
+                  }
+                >
+                  <MCI className={"h-3 w-3"} />
+                </button>
 
-              <div className={"text-2xl font-robotoCondensed tracking-widest"}>
-                {lessonDetails?.subName.toUpperCase()}
+                <div className={"text-xl font-robotoCondensed tracking-widest"}>
+                  {lessonDetails?.subName.toUpperCase()}
+                </div>
               </div>
             </div>
 
-            <div className={"text-sm"}>
-              <Warning warn="Changing Tabs without saving  will remove unsaved works." />
-            </div>
             <div>
               <Tab children={tabs} onTabItemChanged={handleTabItemChanged} />
             </div>
@@ -149,7 +147,7 @@ function Tab({
   };
   return (
     <div>
-      <div className={`flex ${align} gap-6 font-robotoCondensed`}>
+      <div className={`flex ${align}  font-robotoCondensed`}>
         {children.map((tabItem, index) => (
           <div
             id={index}
@@ -157,8 +155,10 @@ function Tab({
             onClick={() => {
               handleTabChange(index);
             }}
-            className={`cursor-pointer hover:underline ${
-              index === current ? "text-emerald-300" : "text-gray-300"
+            className={` cursor-pointer  px-3 py-1 text-center tracking-wider ${
+              index === current
+                ? "text-emerald-300 bg-coolGray-800 border-b-2 border-emerald-300"
+                : "text-gray-300"
             }`}
           >
             {tabItem}
@@ -302,11 +302,12 @@ function QuestionTab({ preQue, onQueUpdate }) {
     setPreQues([...preQues, blankQue]);
     // onQueUpdate(preQues);
   };
-  const hadleSaveAndUpdate = (index, ttype, tqn, tan) => {
+  const hadleSaveAndUpdate = (index, ttype, tqn, tref, tan) => {
     let tempT = preQues;
     tempT[index] = {
       type: { typeText: ttype },
       qtext: tqn,
+      reference: tref,
       ans: tan,
     };
     setPreQues([...tempT]);
@@ -320,8 +321,8 @@ function QuestionTab({ preQue, onQueUpdate }) {
             <QuestionCard
               key={index}
               Qn={q}
-              onSave={(ttype, tqn, tan) =>
-                hadleSaveAndUpdate(index, ttype, tqn, tan)
+              onSave={(ttype, tqn, tref, tan) =>
+                hadleSaveAndUpdate(index, ttype, tqn, tref, tan)
               }
             />
           ))}{" "}
@@ -346,14 +347,31 @@ function QuestionCard({ Qn, onSave }) {
   const [editMode, setEditMode] = useState(Qn?.qtext ? false : true);
   const typeRef = useRef();
   const qtxRef = useRef();
+  const rRef = useRef();
   const aRef = useRef();
+  const [collapse, setCollapse] = useState(Qn?.qtext);
   return (
     <div
       className={`flex flex-col  ${
         editMode ? "gap-2 " : "gap-0"
-      }   md:flex-row w-full bg-coolGray-800 px-3 py-2 rounded-md text-sm uppercase`}
+      }   md:flex-row w-full bg-coolGray-800 px-3 py-2 rounded-md text-sm`}
     >
-      <div className={"flex  md:w-1/6 "}>
+      <div className={"flex lg:hidden w-full justify-end "}>
+        {collapse ? (
+          <Fdw
+            onClick={() => {
+              setCollapse(!collapse);
+            }}
+          />
+        ) : (
+          <Fdu
+            onClick={() => {
+              setCollapse(!collapse);
+            }}
+          />
+        )}
+      </div>
+      <div className={`flex  md:w-1/6 ${collapse ? "hidden lg:flex" : ""} `}>
         {editMode ? (
           <input
             ref={typeRef}
@@ -364,29 +382,47 @@ function QuestionCard({ Qn, onSave }) {
             className={`uppercase rounded-sm border focus:outline-none bg-coolGray-800 px-2 py-1.5  w-full`}
           />
         ) : (
-          <div className={`bg-transparent  mt-1.5 mb-1.5   w-full`}>
+          <div className={`bg-transparent  mt-1 mb-1   w-full`}>
+            <div className={"text-gray-400 text-sm"}>TYPE</div>
             {Qn?.type?.typeText.toUpperCase()}
           </div>
         )}
       </div>
-
-      <div className={"flex md:w-full "}>
+      <div className={`flex md:w-full `}>
         {editMode ? (
           <input
             ref={qtxRef}
             type="text"
-            placeholder={"Description"}
+            placeholder={"Question"}
             disabled={!editMode}
             defaultValue={Qn?.qtext}
             className={`rounded-sm border focus:outline-none bg-coolGray-800 m-0 px-2 py-1.5   w-full`}
           />
         ) : (
-          <div className={`bg-transparent mt-1 mb-1.5   w-full `}>
+          <div className={`bg-transparent mt-1 mb-1   w-full `}>
+            <div className={"text-gray-400 text-sm"}>Question</div>
             {Qn?.qtext}
           </div>
         )}
       </div>
-      <div className={"flex  md:w-full"}>
+      <div className={`flex  md:w-1/6 ${collapse ? "hidden lg:flex" : ""} `}>
+        {editMode ? (
+          <input
+            ref={rRef}
+            type="text"
+            placeholder={"Reference"}
+            disabled={!editMode}
+            defaultValue={Qn?.reference?.toUpperCase()}
+            className={`uppercase rounded-sm border focus:outline-none bg-coolGray-800 px-2 py-1.5  w-full`}
+          />
+        ) : (
+          <div className={`bg-transparent  mt-1 mb-1   w-full`}>
+            <div className={"text-gray-400 text-sm"}>REF</div>
+            {Qn?.reference?.toUpperCase()}
+          </div>
+        )}
+      </div>
+      <div className={`flex  md:w-full ${collapse ? "hidden lg:flex" : ""}`}>
         {editMode ? (
           <input
             ref={aRef}
@@ -397,12 +433,17 @@ function QuestionCard({ Qn, onSave }) {
             className={`rounded-sm border focus:outline-none bg-coolGray-800 px-2 py-1.5  w-full`}
           />
         ) : (
-          <div className={`bg-transparent  mt-1.5 mb-1.5   w-full`}>
+          <div className={`bg-transparent  mt-1 mb-1  w-full`}>
+            <div className={"text-gray-400 text-sm"}>ANS</div>
             {Qn?.ans}
           </div>
         )}
       </div>
-      <div className={`${!editMode ? "mt-2" : ""} md:mt-0`}>
+      <div
+        className={`${!editMode ? "mt-2" : ""} md:mt-0 ${
+          collapse ? "hidden lg:flex" : ""
+        }`}
+      >
         {!editMode ? (
           <button
             onClick={() => {
@@ -423,6 +464,7 @@ function QuestionCard({ Qn, onSave }) {
                 onSave(
                   typeRef.current.value,
                   qtxRef.current.value,
+                  rRef.current.value,
                   aRef.current.value
                 );
               }
