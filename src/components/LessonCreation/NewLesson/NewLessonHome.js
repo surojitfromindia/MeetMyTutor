@@ -1,8 +1,4 @@
-/**
- * Propmt user to create a new lesson here.
- * Also list all temporary lessons.
- * Will publish them separately
- */
+
 import {
   PlusIcon,
   CheckCircleIcon,
@@ -11,7 +7,7 @@ import {
 import { useState, useEffect } from "react";
 import { UploadIcon, ExclamationIcon } from "@heroicons/react/outline";
 import { subjectnames } from "../../../utils/subjectlist";
-import CreateALesson from "./CreateALesson";
+import CreateANewLessonModal from "./CreateALessonModal";
 import { useRef } from "react";
 import RAPI from "../../../API/RequestAPI";
 import LessonTimeline from "../LessonTimeline";
@@ -150,7 +146,7 @@ export default function NewLessonHome({ gnameP, gnamelist }) {
     <div className={"flex flex-col relative min-h-screen mt-5  "}>
       <div>
         <div
-          className={` ${
+          className={`z-10 ${
             gname ? "hidden" : "fixed"
           } bg-coolGray-800 bg-opacity-90  flex justify-center items-center  top-0 right-0 bottom-0 left-0`}
         >
@@ -160,7 +156,7 @@ export default function NewLessonHome({ gnameP, gnamelist }) {
           />
         </div>
         <div
-          className={` ${
+          className={`z-10 ${
             showsubjectNamModal ? "fixed" : "hidden"
           } bg-gray-900 bg-opacity-80  flex justify-center items-center top-0 right-0 bottom-0 left-0`}
         >
@@ -206,7 +202,7 @@ export default function NewLessonHome({ gnameP, gnamelist }) {
         <CurrentNewLesson />
       </div>
       {createdLessonPreInfo && (
-        <CreateALesson
+        <CreateANewLessonModal
           show={showCreateLesson}
           onSave={handleASubjectUpdate}
           onclose={() => {

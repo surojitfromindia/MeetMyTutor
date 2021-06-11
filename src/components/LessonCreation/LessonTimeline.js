@@ -2,12 +2,14 @@ import { RefreshIcon } from "@heroicons/react/solid";
 export default function LessonTimeline() {
   return (
     <div className={"overflow-y-auto"}>
-      <div className={"rounded-md flex flex-col gap-1 bg-rose-600 px-3 py-4"}>
+      <div
+        className={"rounded-md flex flex-col gap-1 bg-lightBlue-600 px-3 py-4"}
+      >
         <div className={"flex flex-row justify-between"}>
           <span className={"font-poppin text-lg tracking-wide"}>Timeline</span>
           <button
             className={
-              "outline-none flex items-center gap-1  font-medium text-sm  tracking-wider focus:outline-none  px-2 py-1.5  rounded-md hover:bg-opacity-95 bg-rose-800 bg-opacity-80 text-warmGray-100"
+              "outline-none flex items-center gap-1  font-medium text-sm  tracking-wider focus:outline-none  px-2 py-1.5  rounded-md hover:bg-opacity-95 bg-lightBlue-800 bg-opacity-80 text-warmGray-100"
             }
           >
             <RefreshIcon className={"h-5 w-5"} />
@@ -38,14 +40,14 @@ export default function LessonTimeline() {
           <div className={"flex flex-row items-center gap-2"}>
             <button
               className={
-                "outline-none w-20 font-medium text-sm  tracking-wider focus:outline-none  px-3 py-1.5  rounded-md hover:bg-opacity-95 bg-gray-50 bg-opacity-80 text-rose-600"
+                "outline-none w-20 font-medium text-sm  tracking-wider focus:outline-none  px-3 py-1.5  rounded-md hover:bg-opacity-95 bg-gray-50 bg-opacity-80 text-lightBlue-600"
               }
             >
               PREV
             </button>
             <button
               className={
-                "outline-none w-20 font-medium text-sm  tracking-wider focus:outline-none  px-3 py-1.5  rounded-md hover:bg-opacity-95 bg-rose-700 bg-opacity-80 text-gray-50"
+                "outline-none w-20 font-medium text-sm  tracking-wider focus:outline-none  px-3 py-1.5  rounded-md hover:bg-opacity-95 bg-lightBlue-700 bg-opacity-80 text-gray-50"
               }
             >
               NEXT
@@ -72,23 +74,21 @@ function TimelineCard({
         </div>
         {!isLast && (
           <div
-            className={"border-l-2  rounded-md h-full border-yellow-300"}
+            className={"border-l-2  rounded-md h-full border-coolGray-300"}
           ></div>
         )}
       </div>
-      <div className={"px-3 pb-5 cursor-pointer "}>{child}</div>
+      <div className={"px-3 pb-5 cursor-default "}>{child}</div>
     </div>
   );
 }
 
-function CCirlcle({ ouC = "border-yellow-300", inC = "bg-yellow-300" }) {
+function CCirlcle({ ouC = "border-coolGray-300", inC = "bg-coolGray-300" }) {
   return (
     <div
-      className={`border-2 ${ouC} w-4 h-4 rounded-full flex items-center justify-center`}
+      className={`border-2 ${ouC} w-3 h-3 rounded-full flex items-center justify-center`}
     >
-      <div className={`p-0.5 w-2 h-2  ${inC} rounded-full`}></div>
+      <div className={`p-0.5 w-1.5 h-1.5  ${inC} rounded-full`}></div>
     </div>
   );
 }
-
-
