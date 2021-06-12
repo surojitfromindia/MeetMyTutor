@@ -1,25 +1,24 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import {
   FiArrowLeftCircle as Bil,
   FiArrowRightCircle as BiR,
   FiMinusCircle as FCC,
 } from "react-icons/fi";
 
-var h = 0;
-export default function Answear({ q, qlist, onclose, laid }) {
-  const [currentQ, setCurrentQ] = useState(q);
+import useListIterator from "../../Hooks/useListIterator";
+
+export default function Answear({ qlist, onclose, laid }) {
+  const { currentValue, goForward, goBack, setGoTo } = useListIterator(qlist);
+
   useEffect(() => {
-    setCurrentQ(qlist[laid]);
-  }, [q, laid, qlist]);
+    setGoTo(laid);
+  }, [laid]);
+
   const handleFo = () => {
-    console.log(h);
-    h = h + 1;
-    if (h <= qlist.length - 1) setCurrentQ(qlist[h]);
+    goForward();
   };
   const handleBac = () => {
-    console.log(h);
-    h = h - 1;
-    if (h >= 0) setCurrentQ(qlist[h]);
+    goBack();
   };
   return (
     <div
@@ -44,13 +43,13 @@ export default function Answear({ q, qlist, onclose, laid }) {
           <div className={"tracking-widest  text-xs text-gray-400 font-medium"}>
             Question
           </div>
-          {currentQ?.qtext}
+          {currentValue?.qtext}
         </div>
         <div className={"text-gray-300 "}>
           <div className={"tracking-widest  text-xs text-gray-400 font-medium"}>
             Description
           </div>
-          {currentQ?.ans}
+          {currentValue?.ans}
         </div>
       </div>
       <div
@@ -60,19 +59,19 @@ export default function Answear({ q, qlist, onclose, laid }) {
       >
         <div>
           <div className={"font-poppin"}>
-            {currentQ?.reference?.toUpperCase()}
+            {currentValue?.reference?.toUpperCase()}
           </div>
         </div>
         <div className={"flex space-x-1 "}>
           <Bil
             onClick={handleBac}
             size={"25"}
-            className={"hover:text-teal-800 transform active:scale-90"}
+            className={"hover:text-coolGray-700 transform active:scale-90"}
           />
           <BiR
             onClick={handleFo}
             size={"25"}
-            className={"hover:text-teal-800 transform active:scale-90"}
+            className={"hover:text-coolGray-700 transform active:scale-90"}
           />
         </div>
       </div>

@@ -1,4 +1,3 @@
-
 export default function PrgBar({ min = 0, max = 0, value = 0 }) {
   let pGradient = " from-emerald-500  to-red-400 ";
   function calculateWidth() {
@@ -11,7 +10,7 @@ export default function PrgBar({ min = 0, max = 0, value = 0 }) {
   } else if (calculateWidth() > 50) {
     pGradient = " from-indigo-500  to-emerald-400 ";
   } else if (calculateWidth() > 20) {
-    pGradient = " from-rose-500  to-red-400 ";
+    pGradient = " from-white  to-green-400 ";
   }
 
   const pStyle = calculateWidth();

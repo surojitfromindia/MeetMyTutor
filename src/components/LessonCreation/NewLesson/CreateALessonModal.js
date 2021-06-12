@@ -104,7 +104,7 @@ export default function CreateANewLessonModal({
           <div className={"flex  transition-all ease-in-out  max-h-16 "}></div>
           <button
             className={
-              "outline-none flex-shrink-0 flex flex-row items-center  font-medium text-sm  tracking-wider focus:outline-none    rounded-sm hover:bg-opacity-95 bg-teal-500 bg-opacity-80 text-warmGray-100"
+              "outline-none flex-shrink-0 flex flex-row items-center  font-medium text-sm  tracking-wider focus:outline-none    rounded-sm hover:bg-opacity-95 bg-emerald-600  text-warmGray-100"
             }
           >
             {!ustatus ? (

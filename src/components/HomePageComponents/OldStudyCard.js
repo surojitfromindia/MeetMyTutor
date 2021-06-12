@@ -4,7 +4,7 @@ export default function OldStudyCard() {
   return (
     <div
       className={
-        "h-44 px-5 py-3 flex flex-col justify-between rounded-md bg-gradient-to-tr  from-indigo-500 via-indigo-600 to-lightBlue-600"
+        "lg:h-48 px-5 py-3 flex flex-col justify-between rounded-md bg-gradient-to-tr  from-indigo-500 via-indigo-600 to-lightBlue-600"
       }
     >
       <div className={"flex flex-col"}>

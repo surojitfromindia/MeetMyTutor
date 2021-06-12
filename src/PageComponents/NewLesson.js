@@ -54,22 +54,24 @@ export default function NewLesson({ groupIdProp }) {
   if (!isLoaded)
     return (
       <div className={"py-3 px-5  flex justify-center items-center"}>
-      <div className={"flex space-x-2 items-center justify-center h-screen"}>
-        <Spinner />
-        <div>Loading...</div>
+        <div className={"flex space-x-2 items-center justify-center h-screen"}>
+          <Spinner />
+          <div>Loading...</div>
+        </div>
       </div>
-    </div>
     );
 
   return (
-    <div className={"px-5 py-5 mt-3"}>
-      <div className={"w-60 sm:w-80  bg-coolGray-800 "}>
+    <div className={" mt-3"}>
+      <div className={"w-60 sm:w-80   "}>
         <div>
-          <div className={"font-robotoCondensed text-2xl text-red-300"}>
+          <div className={"font-robotoCondensed text-2xl text-orange-300"}>
             NEW LESSONS
           </div>
           <div
-            className={"text-xl font-medium tracking-wide  mb-1.5 text-red-400"}
+            className={
+              "text-xl font-medium tracking-wide  mb-1.5 text-orange-100"
+            }
           >
             <span className={"text-base"}>Your</span>{" "}
             <span className={"text-sm"}>Proggress</span>
@@ -77,7 +79,7 @@ export default function NewLesson({ groupIdProp }) {
           <PrgBar max={max} value={pV} min={0} />
         </div>
       </div>
-      <div className={"mt-10"}>
+      <div className={"mt-3"}>
         {groupInfo && (
           <AllNewStudy
             AllSubjects={groupInfo.NewLesson.allSubjects}

@@ -7,8 +7,10 @@ import OldStudyCard from "../components/HomePageComponents/OldStudyCard";
 import NewStudyCard from "../components/HomePageComponents/NewStudyCard";
 import JoinedGroupList from "../components/HomeComponents/JoinedGroupList";
 import Spinner from "../components/CommonComponents/Spinner";
+import NewLesson from "../PageComponents/NewLesson";
 
 export default function AllLesson({ groupInformation }) {
+  console.log(groupInformation);
   const { groupId } = useParams();
   const [authorised, setAuthorised] = useState(true);
   const [groupInfo, setGroupInfo] = useState();
@@ -56,41 +58,44 @@ export default function AllLesson({ groupInformation }) {
   return authorised ? (
     <div
       className={
-        "px-5 py-3 md:gap-2 flex h-full md:h-screen  flex-col md:flex-row "
+        "px-5 pt-10 md:gap-2 flex h-full md:h-screen md:overscroll-y-auto  flex-col md:flex-row "
       }
     >
       <div
         className={
-          "hidden md:rounded-md md:flex  md:max-w-min md:min-w-min overflow-y-auto scrollbar px-3"
+          "hidden h-screen md:rounded-md md:flex lg:w-1/4  md:max-w-min md:min-w-min overflow-y-auto scrollbar px-3"
         }
       >
         <div> {<JoinedGroupList glist={groupInformation} />}</div>
       </div>
 
-      <div className={"overflow-y-auto scrollbar"}>
-        {groupInfoFromStudyGroup && (
-          <Greet
-            heading="Hey, Ready to Roll !"
-            backG="to-rose-500 from-red-400"
-            groupName={groupInfoFromStudyGroup.group_name}
-          />
-        )}
+      <div className={" h-screen flex flex-col "}>
+        <div>
+          {groupInfoFromStudyGroup && (
+            <Greet
+              heading="Hey, Ready to Roll !"
+              backG="to-rose-500 from-red-400"
+              groupName={groupInfoFromStudyGroup.group_name}
+            />
+          )}
+        </div>
 
-        <div className={"mt-2  grid  gap-2  lg:grid-cols-2  xl:grid-cols-3 "}>
+        <div className={"mt-2 flex flex-col gap-2   "}>
           {groupInfo?.NewLesson && (
             <NewStudyCard
               gid={groupId}
               lesson={groupInfo.NewLesson.allSubjects}
             />
           )}
-          {/*groupInfo?.NewLesson && (
-            <UpcomigCard
-              gid={groupId}
-              lesson={groupInfo.NewLesson.allSubjects}
-            />
-          )*/}
+
           {groupInfo && <OldStudyCard />}
         </div>
+      </div>
+
+      <div
+        className={"hidden h-screen lg:overflow-y-auto scrollbar lg:flex lg:w-2/4"}
+      >
+        <NewLesson groupIdProp={groupId} />
       </div>
     </div>
   ) : (
