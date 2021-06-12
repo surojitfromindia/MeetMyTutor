@@ -1,8 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { BadgeCheckIcon } from "@heroicons/react/solid";
-let backG = "from-lightBlue-700  to-rose-600";
-let doneG = "from-teal-700  to-green-600";
+let backG = "bg-gradient-to-tr  from-lightBlue-700  to-rose-600";
+let doneG = "bg-emerald-700 ";
 export default function MoreDeatilsOnSubject({
   subjectData,
   isDone = false,
@@ -12,9 +12,9 @@ export default function MoreDeatilsOnSubject({
   return (
     <div
       id={subjectData?.subjectName}
-      className={`flex flex-col justify-between   px-5 py-2.5 rounded-md bg-gradient-to-tr  ${
+      className={`flex flex-col justify-between   px-5 py-2.5 rounded-md  ${
         isAllDone ? doneG : backG
-      }`}
+      } shadow-xl`}
     >
       <div>
         <div className={"flex flex-row justify-between mb-1 items-center"}>
