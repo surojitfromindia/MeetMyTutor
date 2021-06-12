@@ -9,25 +9,24 @@ import { useState } from "react";
 
 export default function NewStudyDetails({ Subject, onTopicComplete }) {
   const [showAnsModal, setShowModal] = useState(false);
-  const [launchingAns, setLaunchingAns] = useState();
   const [id, setid] = useState(0);
+
   const handleModalOpenAndSet = (idx) => {
     setShowModal(true);
-    setLaunchingAns(Subject.question[idx]);
     setid(idx);
   };
+
   return (
     <div className={"flex items-center justify-center w-full "}>
       <div
         className={`z-10 ${
           showAnsModal ? "fixed" : "hidden"
-        } bg-coolGray-800 bg-opacity-90  flex justify-center items-center  top-0 right-0 bottom-0 left-0`}
+        } bg-gray-900 bg-opacity-90  flex justify-center items-center  top-0 right-0 bottom-0 left-0`}
       >
         <Answear
           onclose={() => {
             setShowModal(false);
           }}
-          q={launchingAns}
           qlist={Subject.question}
           laid={id}
         />
