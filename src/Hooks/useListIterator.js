@@ -9,9 +9,9 @@ import { useState } from "react";
  */
 export default function useListIterator(ilist, initalIndex = 0) {
   const [currentValue, setCurrentValue] = useState(ilist[initalIndex]);
+  const [lastI, setlatI] = useState(initalIndex);
 
-  const [lastI, setlatI] = useState(0);
-
+  
   function goForward(step = 1) {
     if (lastI + step < ilist.length) {
       setCurrentValue(ilist[lastI + step]);
@@ -28,10 +28,32 @@ export default function useListIterator(ilist, initalIndex = 0) {
     setCurrentValue(ilist[indx]);
     setlatI(indx);
   }
+
+  function circularFo(step = 1) {
+    if (lastI + step < ilist.length) {
+      setCurrentValue(ilist[lastI + step]);
+      setlatI(lastI + step);
+    } else {
+      setlatI(0);
+      setCurrentValue(ilist[lastI + step]);
+    }
+  }
+
+  function circularBa(step = -1) {
+    if (lastI + step >= 0) {
+      setlatI(lastI + step);
+      setCurrentValue(ilist[lastI - 1]);
+    } else {
+      setlatI(ilist.length);
+      setCurrentValue(ilist[lastI - 1]);
+    }
+  }
   return {
     currentValue,
     goForward,
     goBack,
     setGoTo,
+    circularFo,
+    circularBa,
   };
 }
