@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import NewLesson from "../../PageComponents/NewLesson";
+import DateSelector from "../CommonComponents/DateSelector";
 
 export default function NewStudyCard({ lesson = [], gid }) {
   const [expanded, setExpanded] = useState(false);
@@ -8,7 +9,7 @@ export default function NewStudyCard({ lesson = [], gid }) {
   return (
     <div
       className={
-        "lg:h-48  overflow-hidden px-5 py-3 flex flex-col justify-between rounded-md bg-gradient-to-tr to-green-500  from-emerald-700"
+        "lg:h-48  overflow-visible px-5 py-3 flex flex-col justify-between rounded-md bg-gradient-to-tr to-green-500  from-emerald-700"
       }
     >
       <div className={"flex flex-col"}>
@@ -29,7 +30,13 @@ export default function NewStudyCard({ lesson = [], gid }) {
           </span>
         </div>
       </div>
-      <div className={"flex justify-start"}>
+      <div className={"flex flex-col gap-2 "}>
+        <div className={"flex items-center  z-20   "}>
+          <DateSelector
+            backColor={"bg-emerald-500 bg-opacity-90"}
+            onDateChanged={() => {}}
+          />
+        </div>
         <button
           onClick={() => {
             setExpanded((t) => !t);

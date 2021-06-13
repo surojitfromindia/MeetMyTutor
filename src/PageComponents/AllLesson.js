@@ -10,7 +10,6 @@ import Spinner from "../components/CommonComponents/Spinner";
 import NewLesson from "../PageComponents/NewLesson";
 
 export default function AllLesson({ groupInformation }) {
-  console.log(groupInformation);
   const { groupId } = useParams();
   const [authorised, setAuthorised] = useState(true);
   const [groupInfo, setGroupInfo] = useState();
@@ -58,18 +57,18 @@ export default function AllLesson({ groupInformation }) {
   return authorised ? (
     <div
       className={
-        "px-5 pt-10 md:gap-2 flex h-full md:h-screen md:overscroll-y-auto  flex-col md:flex-row "
+        "px-5  md:gap-5  py-5   flex  md:overscroll-y-auto  flex-col md:flex-row "
       }
     >
       <div
         className={
-          "hidden h-screen md:rounded-md md:flex lg:w-1/4  md:max-w-min md:min-w-min overflow-y-auto scrollbar px-3"
+          "hidden h-screen md:rounded-md md:flex lg:w-1/4  md:max-w-min md:min-w-min overflow-y-auto scrollbar "
         }
       >
         <div> {<JoinedGroupList glist={groupInformation} />}</div>
       </div>
 
-      <div className={" h-screen flex flex-col "}>
+      <div className={" flex flex-col lg:overflow-y-auto lg:scrollbar "}>
         <div>
           {groupInfoFromStudyGroup && (
             <Greet
@@ -99,7 +98,7 @@ export default function AllLesson({ groupInformation }) {
       </div>
     </div>
   ) : (
-    <div className={"flex h-screen justify-center items-center"}>
+    <div className={"flex   justify-center items-center"}>
       UnAuthorised
     </div>
   );

@@ -1,4 +1,5 @@
 import React from "react";
+import DateSelector from "../CommonComponents/DateSelector";
 
 export default function OldStudyCard() {
   return (
@@ -21,7 +22,7 @@ export default function OldStudyCard() {
           <span className={"text-sm text-coolGray-200 ml-1"}>excersises</span>
         </div>
       </div>
-      <div className={"flex justify-start"}>
+      <div className={"flex flex-col items-start gap-2"}>
         <button
           className={
             "outline-none text-sm font-medium tracking-wider focus:outline-none  px-3 py-1 rounded-md hover:bg-opacity-95 bg-indigo-400 bg-opacity-80 text-warmGray-100"
@@ -29,6 +30,13 @@ export default function OldStudyCard() {
         >
           Do again
         </button>
+
+        <div className={"flex items-center justify-center "}>
+          <DateSelector
+            backColor={"bg-indigo-400 bg-opacity-90"}
+            onDateChanged={() => {}}
+          />
+        </div>
       </div>
     </div>
   );
