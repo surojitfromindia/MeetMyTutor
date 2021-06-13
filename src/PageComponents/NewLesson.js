@@ -54,7 +54,7 @@ export default function NewLesson({ groupIdProp }) {
   if (!isLoaded)
     return (
       <div className={"py-3 px-5  flex justify-center items-center"}>
-        <div className={"flex space-x-2 items-center justify-center h-screen"}>
+        <div className={"flex space-x-2 items-center justify-center "}>
           <Spinner />
           <div>Loading...</div>
         </div>

@@ -11,7 +11,6 @@ export default function useListIterator(ilist, initalIndex = 0) {
   const [currentValue, setCurrentValue] = useState(ilist[initalIndex]);
   const [lastI, setlatI] = useState(initalIndex);
 
-  
   function goForward(step = 1) {
     if (lastI + step < ilist.length) {
       setCurrentValue(ilist[lastI + step]);
