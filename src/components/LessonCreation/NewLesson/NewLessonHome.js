@@ -1,9 +1,9 @@
-
 import {
   PlusIcon,
   CheckCircleIcon,
   MinusCircleIcon,
 } from "@heroicons/react/solid";
+import { utc } from "moment";
 import { useState, useEffect } from "react";
 import { UploadIcon, ExclamationIcon } from "@heroicons/react/outline";
 import { subjectnames } from "../../../utils/subjectlist";
@@ -16,6 +16,7 @@ import Spinner from "../../CommonComponents/Spinner";
 
 export default function NewLessonHome({ gnameP, gnamelist }) {
   const [sBL, setSBL] = useState([]);
+  const [oBL, setOBL] = useState([]);
   const [selectedGroupInfo, setSelectedGroupInfo] = useState();
   const [createdLessonPreInfo, setCreatedLessonPreInfo] = useState();
   const [updateInfo, setUpdateInfo] = useState("NONE");
@@ -24,6 +25,7 @@ export default function NewLessonHome({ gnameP, gnamelist }) {
     let groupInfo = gnamelist.filter((group) => group.group_name === gnameP)[0];
     setSelectedGroupInfo(groupInfo);
     if (groupInfo?.TempLesson) setSBL(groupInfo?.TempLesson?.allSubjects);
+    if (groupInfo?.OldLesson) setOBL(groupInfo?.OldLesson);
   }, [gnameP, gnamelist]);
 
   const [gname, setGname] = useState(gnameP);
@@ -111,13 +113,26 @@ export default function NewLessonHome({ gnameP, gnamelist }) {
     setShowCreateLesson(true);
   };
 
-  const handlePublishConfirm = () => {
+  const handlePublishConfirm = (archiveThisLesson) => {
     setConfirmModal(false);
     setUpdateInfo(
       <span className={"inline-flex items-center space-x-1"}>
         <span>Publishing</span> <Spinner size={20} color={"white"} />
       </span>
     );
+    if (archiveThisLesson) {
+      RAPI()
+        .post(`/lesson/${selectedGroupInfo._id}/move`)
+        .then(({ data }) => {
+          console.log(data.message.des);
+          setUpdateInfo(
+            <span className={"inline-flex items-center space-x-1"}>
+              <span>{data.message.des}</span>
+              <CheckCircleIcon className={"h-5 w-5"} />
+            </span>
+          );
+        });
+    }
     RAPI()
       .put(`/lesson/${selectedGroupInfo._id}/publish`)
       .then((_) => {
@@ -169,8 +184,6 @@ export default function NewLessonHome({ gnameP, gnamelist }) {
         </div>
         <div
           onClick={(ev) => {
-            ev.preventDefault();
-            ev.stopPropagation();
             setConfirmModal(false);
           }}
           className={`z-10 ${
@@ -180,26 +193,25 @@ export default function NewLessonHome({ gnameP, gnamelist }) {
           <ConfirmationModal child={cModalChilds} />
         </div>
       </div>
-      <div className={"flex flex-col space-y-3"}>
+      <div className={"flex flex-col space-y-3 mb-3"}>
         {selectedGroupInfo && (
           <div className={"text-2xl "}>{selectedGroupInfo.group_name}</div>
         )}
         <NewLessonCreateButton />
-        <div>
-          <LessonTimeline />
-        </div>
-        <div>
-          <CPanel
-            subjects={sBL}
-            onAddSubject={handAddSubject}
-            onRemoveSubject={handleSubjectRemove}
-            onOpenSubject={handleSubjectOpen}
-            onFinalUpdate={handleFinalize}
-            onPublish={handleSubjectPublish}
-            updateMessage={updateInfo}
-          />
-        </div>
-        <CurrentNewLesson />
+
+        <LessonTimeline />
+
+        <CPanel
+          subjects={sBL}
+          onAddSubject={handAddSubject}
+          onRemoveSubject={handleSubjectRemove}
+          onOpenSubject={handleSubjectOpen}
+          onFinalUpdate={handleFinalize}
+          onPublish={handleSubjectPublish}
+          updateMessage={updateInfo}
+        />
+
+        <LPanel subjects={oBL} onOpenSubject={handleSubjectOpen} />
       </div>
       {createdLessonPreInfo && (
         <CreateANewLessonModal
@@ -238,13 +250,39 @@ function NewLessonCreateButton() {
   );
 }
 
-function CurrentNewLesson() {
+function LPanel({ subjects = [], onOpenSubject }) {
   return (
     <div>
-      <div className={"h-32 w-full  text-gray-400 rounded-md"}>
-        <div className={"flex flex-row  h-full "}>
-          <span className={""}>Last Published</span>
-        </div>
+      <div
+        className={"w-full  flex flex-col space-y-2 text-gray-400 rounded-md"}
+      >
+        <div className={""}>Last Published</div>
+
+        {subjects && (
+          <div
+            className={
+              "max-h-[25rem] overflow-y-auto scrollbar flex flex-col space-y-5"
+            }
+          >
+            {subjects.map((s) => (
+              <div className={"flex flex-col space-y-1"}>
+                <div>Last Updated : {utc(s.lesson_date).format("DD/YYYY")}</div>
+                <div className={"flex flex-col gap-2 md:flex-row md:flex-wrap"}>
+                  {s.allSubjects.map((sub) => (
+                    <SubjectCard
+                      tempSubjectDetails={sub}
+                      key={sub.subName}
+                      onOpen={() => {
+                        onOpenSubject(sub);
+                      }}
+                      options={{ table: false }}
+                    />
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
@@ -295,6 +333,7 @@ function CPanel({
 }) {
   return (
     <div className={"overflow-y-auto"}>
+      <div className={"text-gray-400 mb-1.5"}>Publish</div>
       <div className={" rounded-t-md  flex-col gap-3 bg-emerald-700 py-2 "}>
         <span className={"px-3 "}>{updateMessage}</span>
       </div>
@@ -375,7 +414,24 @@ function CPanel({
   );
 }
 
-function SubjectCard({ tempSubjectDetails, onRemove, onOpen }) {
+function SubjectCard({
+  tempSubjectDetails,
+  onRemove,
+  onOpen,
+  options = {
+    remove: true,
+    open: true,
+    table: true,
+  },
+}) {
+  /*
+  options = {
+    remove : true,
+    open : true,
+    table : true
+  }
+  */
+
   const handleSubjectCardClick = (ev) => {
     ev.preventDefault();
     ev.stopPropagation();
@@ -397,34 +453,40 @@ function SubjectCard({ tempSubjectDetails, onRemove, onOpen }) {
         <div className={"text-xl tracking-wider text-orange-300"}>
           {tempSubjectDetails?.subName}
         </div>
-        <div onClick={handleRemove} className={"cursor-pointer"}>
-          <MinusCircleIcon className={"h-5 w-5"} />
-        </div>
+        {options.remove && (
+          <div onClick={handleRemove} className={"cursor-pointer"}>
+            <MinusCircleIcon
+              className={"h-5 w-5 text-emerald-900 opacity-70"}
+            />
+          </div>
+        )}
       </div>
-      <div className={"flex flex-row gap-4 text-sm flex-wrap"}>
-        <div className={"flex flex-col space-y"}>
-          <span className={"text-gray-200 tracking-wide"}>TASK(S)</span>
-          <span className={"text-gray-300 font-poppin text-sm"}>
-            {" "}
-            {tempSubjectDetails?.topic.length}{" "}
-          </span>
+      {options.table && (
+        <div className={"flex flex-row gap-4 text-sm flex-wrap"}>
+          <div className={"flex flex-col space-y"}>
+            <span className={"text-gray-200 tracking-wide"}>TASK(S)</span>
+            <span className={"text-gray-300 font-poppin text-sm"}>
+              {" "}
+              {tempSubjectDetails?.topic.length}{" "}
+            </span>
+          </div>
+          <div className={"flex flex-col space-y"}>
+            <span className={"text-gray-200 tracking-wide"}>QUES(S)</span>
+            <span className={"text-gray-300 font-poppin text-sm"}>
+              {" "}
+              {tempSubjectDetails?.question.length}{" "}
+            </span>
+          </div>
+          <div className={"flex flex-col space-y"}>
+            <span className={"text-gray-200 tracking-wide"}>QUIZ(S)</span>
+            <span className={"text-gray-300 font-poppin text-sm"}> 0 </span>
+          </div>
+          <div className={"flex flex-col space-y"}>
+            <span className={"text-gray-200 tracking-wide"}>EXPL(S)</span>
+            <span className={"text-gray-300 font-poppin text-sm"}> 0 </span>
+          </div>
         </div>
-        <div className={"flex flex-col space-y"}>
-          <span className={"text-gray-200 tracking-wide"}>QUES(S)</span>
-          <span className={"text-gray-300 font-poppin text-sm"}>
-            {" "}
-            {tempSubjectDetails?.question.length}{" "}
-          </span>
-        </div>
-        <div className={"flex flex-col space-y"}>
-          <span className={"text-gray-200 tracking-wide"}>QUIZ(S)</span>
-          <span className={"text-gray-300 font-poppin text-sm"}> 0 </span>
-        </div>
-        <div className={"flex flex-col space-y"}>
-          <span className={"text-gray-200 tracking-wide"}>EXPL(S)</span>
-          <span className={"text-gray-300 font-poppin text-sm"}> 0 </span>
-        </div>
-      </div>
+      )}
       <div className={"flex flex-row gap-2 flex-wrap text-sm"}>
         <div className={""}>
           <span className={"tracking-wider"}>CREATED</span> :{" "}
@@ -521,22 +583,35 @@ function getPreSubjects() {
 }
 
 const ConfirmationModal = ({ child }) => {
-  return <div>{child}</div>;
+  return (
+    <div
+      onClick={(ev) => {
+        ev.stopPropagation();
+      }}
+    >
+      {child}
+    </div>
+  );
 };
 
 const PublishConfirm = ({ handlePublishOK }) => {
+  const checkRef = useRef();
   return (
     <div className={"px-5 rounded-md py-4 bg-coolGray-700 mx-10"}>
       <Warning
+        bgc={"bg-trans"}
         warn={
           "This will force these lesson to be published as a new lesson overriding the old lessons. Student's will recived the update as soon as they logged in."
         }
       />
-
+      <div className={"ml-8 flex space-x-2 items-center"}>
+        <input id="chkArc" type="checkbox" defaultChecked ref={checkRef} />
+        <label htmlFor={"chkArc"}>Archive current lesson</label>
+      </div>
       <button
-        onClick={handlePublishOK}
+        onClick={() => handlePublishOK(checkRef.current.checked)}
         className={
-          "outline-none ml-8 flex items-center gap-1  font-medium text-sm  tracking-wider focus:outline-none  px-2 py-1.5  rounded-md hover:bg-opacity-95 bg-coolGray-800  bg-opacity-80 text-warmGray-100"
+          "outline-none ml-8 mt-2 flex items-center gap-1  font-medium text-sm  tracking-wider focus:outline-none  px-2 py-1.5  rounded-md hover:bg-opacity-95 bg-coolGray-800  bg-opacity-80 text-warmGray-100"
         }
       >
         PUBLISH

@@ -1,4 +1,4 @@
-import { BadgeCheckIcon } from "@heroicons/react/solid";
+import { FaCheckCircle as Chk } from "react-icons/fa";
 import { useState } from "react";
 export default function Topic({
   topics,
@@ -35,8 +35,8 @@ export default function Topic({
           {topicList.map(({ type, des, done }, idx) => (
             <li className={"my-2 cursor-pointer"} key={idx}>
               <div className={"flex"}>
-                <BadgeCheckIcon
-                  className={`w-6 h-6 mr-1.5  flex-shrink-0 ${
+                <Chk
+                  className={`w-5 h-5 mr-1.5 mt-[0.140rem] flex-shrink-0 ${
                     done ? "text-green-300" : ""
                   } text-gray-200`}
                 />

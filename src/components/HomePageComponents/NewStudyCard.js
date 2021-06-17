@@ -9,7 +9,7 @@ export default function NewStudyCard({ lesson = [], gid }) {
   return (
     <div
       className={
-        "lg:h-48  overflow-visible px-5 py-3 flex flex-col justify-between rounded-md bg-gradient-to-tr to-green-500  from-emerald-700"
+        "lg:h-56  overflow-visible px-5 py-3 flex flex-col justify-between rounded-md bg-gradient-to-tr to-green-500  from-emerald-700"
       }
     >
       <div className={"flex flex-col"}>

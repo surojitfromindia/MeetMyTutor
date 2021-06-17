@@ -1,5 +1,26 @@
 import React from "react";
-
+const leg = [
+  {
+    type: "Q",
+    des: "Questions that you must study.",
+  },
+  {
+    type: "Ans",
+    des: "The answear of given question is in answear section.",
+  },
+  {
+    type: "Write",
+    des: "A Home work problem.",
+  },
+  {
+    type: "Quiz",
+    des: "Take the quiz at the end of this list.",
+  },
+  {
+    type: "Read",
+    des: "Read the topic mention in the excecise.",
+  },
+];
 export default function Questions({ questions, onShowAnsClick }) {
   const handleQclick = (idx) => {
     onShowAnsClick(idx);
@@ -37,6 +58,14 @@ export default function Questions({ questions, onShowAnsClick }) {
             </li>
           ))}
         </ul>
+      </div>
+      <div className={"flex flex-col gap-0.5"}>
+        {leg.map(({ des, type }) => (
+          <div className={"flex space-x-1 items-center flex-wrap"}>
+            <span className={"text-sm text-orange-200 w-10 "}>{type}</span>
+            <span className={"text-xs text-gray-200"}>{des}</span>
+          </div>
+        ))}
       </div>
     </div>
   );
