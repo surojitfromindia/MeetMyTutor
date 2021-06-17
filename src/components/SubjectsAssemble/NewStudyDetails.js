@@ -1,10 +1,4 @@
-import {
-  Questions,
-  Topic,
-  TypeLegends,
-  Quuuiz,
-  Answear,
-} from "../OneStudy/OneStudyExp";
+import { Questions, Topic, Answear } from "../OneStudy/OneStudyExp";
 import { useState } from "react";
 
 export default function NewStudyDetails({ Subject, onTopicComplete }) {
@@ -55,12 +49,8 @@ export default function NewStudyDetails({ Subject, onTopicComplete }) {
             />
           )}
         </div>
-        <div>
-          <Quuuiz />
-        </div>
-        <div>
-          <TypeLegends />
-        </div>
+        <div>{/*  <Quuuiz /> */}</div>
+        <div>{/* <TypeLegends /> */}</div>
       </div>
     </div>
   );
