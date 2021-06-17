@@ -1,4 +1,3 @@
-
 import {
   PlusIcon,
   CheckCircleIcon,
@@ -111,13 +110,26 @@ export default function NewLessonHome({ gnameP, gnamelist }) {
     setShowCreateLesson(true);
   };
 
-  const handlePublishConfirm = () => {
+  const handlePublishConfirm = (archiveThisLesson) => {
     setConfirmModal(false);
     setUpdateInfo(
       <span className={"inline-flex items-center space-x-1"}>
         <span>Publishing</span> <Spinner size={20} color={"white"} />
       </span>
     );
+    if (archiveThisLesson) {
+      RAPI()
+        .post(`/lesson/${selectedGroupInfo._id}/move`)
+        .then(({ data }) => {
+          console.log(data.message.des);
+          setUpdateInfo(
+            <span className={"inline-flex items-center space-x-1"}>
+              <span>{data.message.des}</span>
+              <CheckCircleIcon className={"h-5 w-5"} />
+            </span>
+          );
+        });
+    }
     RAPI()
       .put(`/lesson/${selectedGroupInfo._id}/publish`)
       .then((_) => {
@@ -169,8 +181,6 @@ export default function NewLessonHome({ gnameP, gnamelist }) {
         </div>
         <div
           onClick={(ev) => {
-            ev.preventDefault();
-            ev.stopPropagation();
             setConfirmModal(false);
           }}
           className={`z-10 ${
@@ -521,22 +531,35 @@ function getPreSubjects() {
 }
 
 const ConfirmationModal = ({ child }) => {
-  return <div>{child}</div>;
+  return (
+    <div
+      onClick={(ev) => {
+        ev.stopPropagation();
+      }}
+    >
+      {child}
+    </div>
+  );
 };
 
 const PublishConfirm = ({ handlePublishOK }) => {
+  const checkRef = useRef();
   return (
     <div className={"px-5 rounded-md py-4 bg-coolGray-700 mx-10"}>
       <Warning
+        bgc={"bg-trans"}
         warn={
           "This will force these lesson to be published as a new lesson overriding the old lessons. Student's will recived the update as soon as they logged in."
         }
       />
-
+      <div className={"ml-8 flex space-x-2 items-center"}>
+        <input id="chkArc" type="checkbox" defaultChecked ref={checkRef} />
+        <label htmlFor={"chkArc"}>Archive current lesson</label>
+      </div>
       <button
-        onClick={handlePublishOK}
+        onClick={() => handlePublishOK(checkRef.current.checked)}
         className={
-          "outline-none ml-8 flex items-center gap-1  font-medium text-sm  tracking-wider focus:outline-none  px-2 py-1.5  rounded-md hover:bg-opacity-95 bg-coolGray-800  bg-opacity-80 text-warmGray-100"
+          "outline-none ml-8 mt-2 flex items-center gap-1  font-medium text-sm  tracking-wider focus:outline-none  px-2 py-1.5  rounded-md hover:bg-opacity-95 bg-coolGray-800  bg-opacity-80 text-warmGray-100"
         }
       >
         PUBLISH
